@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse trainer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+            touch-action: pan-y; /* Permettre le scroll vertical mais désactiver le scroll horizontal */
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .image-container {
+            margin: 20px 0;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .answer {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #555;
+            font-weight: bold;
+        }
+        .progress {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #555;
+        }
+        .end-message {
+            font-size: 24px;
+            color: #e74c3c;
+            font-weight: bold;
+            display: none;
+        }
+        .instructions {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .nav-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .swipe-hint {
+            display: none;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Styles responsives pour mobile */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+            .image-container {
+                min-height: 200px;
+            }
+            .swipe-hint {
+                display: block;
+                font-style: italic;
+                color: #777;
+                margin: 10px 0;
+            }
+            .instructions p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Integral toolbox</h1>
+    
+    <div class="nav-buttons">
+        <button id="prev-button" class="nav-button">←</button>
+        <button id="show-button" class="nav-button">🧐</button>
+        <button id="next-button" class="nav-button">→</button>
+    </div>
+    
+    <div class="image-container">
+        <!-- L'image sera insérée ici par JavaScript -->
+    </div>
+    
+    <div class="progress">
+        <!-- Le message de progression sera inséré ici par JavaScript -->
+    </div>
+    
+    <div class="end-message">
+        Fin de série, on recommence
+    </div>
+    
+    <p class="swipe-hint">Balayez vers la gauche ou la droite pour naviguer</p>
+    
+    <div class="instructions">
+        <p>Utilisez la <strong>Flèche droite →</strong> pour afficher l'image suivante</p>
+        <p>Utilisez la <strong>Flèche gauche ←</strong> pour revenir à l'image précédente</p>
+        <p>Sur mobile : <strong>balayez</strong> l'écran ou utilisez les <strong>boutons</strong></p>
+    </div>
+
+    <script type="text/javascript">
+        // Configuration du diaporama 
+        const config = {
+            // Liste des noms de fichiers d'images (à remplacer par vos noms réels)
+            image: [
+                ["learn/Algebre/001.png", "learn/Algebre/002.png"],
+                ["learn/Algebre/003.png", "learn/Algebre/004.png"],
+                ["learn/Algebre/005.png", "learn/Algebre/006.png"],
+                ["learn/Algebre/007.png", "learn/Algebre/008.png"],
+                ["learn/Algebre/009.png", "learn/Algebre/010.png"],
+                ["learn/Algebre/011.png", "learn/Algebre/012.png"],
+                ["learn/Algebre/013.png", "learn/Algebre/014.png"],
+                ["learn/Algebre/015.png", "learn/Algebre/016.png"],
+                ["learn/Analyse/001.png", "learn/Analyse/002.png"],
+                ["learn/Analyse/003.png", "learn/Analyse/004.png"],
+                ["learn/Analyse/005.png", "learn/Analyse/006.png"],
+                ["learn/Analyse/007.png", "learn/Analyse/008.png"],
+                ["learn/Analyse/009.png", "learn/Analyse/010.png"],
+                ["learn/Analyse/011.png", "learn/Analyse/012.png"],
+                ["learn/Analyse/013.png", "learn/Analyse/014.png"],
+                ["learn/Analyse/015.png", "learn/Analyse/016.png"],
+                ["learn/Analyse/017.png", "learn/Analyse/018.png"],
+                ["learn/Analyse/019.png", "learn/Analyse/020.png"],
+                ["learn/Analyse/021.png", "learn/Analyse/022.png"],
+                ["learn/Analyse/023.png", "learn/Analyse/024.png"],
+                ["learn/Analyse/025.png", "learn/Analyse/026.png"],
+                ["learn/Analyse/027.png", "learn/Analyse/028.png"],
+                ["learn/Analyse/029.png", "learn/Analyse/030.png"],
+                ["learn/Analyse/031.png", "learn/Analyse/032.png"],
+                ["learn/Analyse/033.png", "learn/Analyse/034.png"],
+                ["learn/Analyse/035.png", "learn/Analyse/036.png"],
+                ["learn/Analyse/037.png", "learn/Analyse/038.png"],
+                ["learn/Analyse/039.png", "learn/Analyse/040.png"],
+                ["learn/Analyse/041.png", "learn/Analyse/042.png"],
+                ["learn/Analyse/043.png", "learn/Analyse/044.png"],
+                ["learn/Analyse/045.png", "learn/Analyse/046.png"],
+                ["learn/Analyse/047.png", "learn/Analyse/048.png"],
+                ["learn/Analyse/049.png", "learn/Analyse/050.png"],
+                ["learn/Analyse/051.png", "learn/Analyse/052.png"],
+                ["learn/Analyse/053.png", "learn/Analyse/054.png"],
+                ["learn/Analyse/055.png", "learn/Analyse/056.png"],
+                ["learn/Analyse/057.png", "learn/Analyse/058.png"],
+                ["learn/Analyse/059.png", "learn/Analyse/060.png"],
+                ["learn/Analyse/061.png", "learn/Analyse/062.png"],
+                ["learn/Analyse/063.png", "learn/Analyse/064.png"],
+                ["learn/Analyse/065.png", "learn/Analyse/066.png"],
+                ["learn/Analyse/067.png", "learn/Analyse/068.png"],
+                ["learn/Analyse/069.png", "learn/Analyse/070.png"],
+                ["learn/Analyse/071.png", "learn/Analyse/072.png"],
+                ["learn/Analyse/073.png", "learn/Analyse/074.png"],
+                ["learn/Analyse/075.png", "learn/Analyse/076.png"],
+                ["learn/Analyse/077.png", "learn/Analyse/078.png"],
+                ["learn/Analyse/079.png", "learn/Analyse/080.png"],
+                ["learn/Analyse/081.png", "learn/Analyse/082.png"],
+                ["learn/Analyse/083.png", "learn/Analyse/084.png"],
+                ["learn/Analyse/085.png", "learn/Analyse/086.png"],
+                ["learn/Analyse/087.png", "learn/Analyse/088.png"],
+                ["learn/Analyse/089.png", "learn/Analyse/090.png"],
+                ["learn/Analyse/091.png", "learn/Analyse/092.png"],
+                ["learn/Analyse/093.png", "learn/Analyse/094.png"],
+                ["learn/Analyse/095.png", "learn/Analyse/096.png"],
+                ["learn/Analyse/097.png", "learn/Analyse/098.png"],
+                ["learn/Analyse/099.png", "learn/Analyse/100.png"],
+                ["learn/Analyse/101.png", "learn/Analyse/102.png"],
+                ["learn/Analyse/103.png", "learn/Analyse/104.png"],
+                ["learn/Analyse/105.png", "learn/Analyse/106.png"],
+                ["learn/Analyse/107.png", "learn/Analyse/108.png"],
+                ["learn/Analyse/109.png", "learn/Analyse/110.png"],
+                ["learn/Analyse/111.png", "learn/Analyse/112.png"],
+                ["learn/Analyse/113.png", "learn/Analyse/114.png"],
+                ["learn/Analyse/115.png", "learn/Analyse/116.png"],
+                ["learn/Analyse/117.png", "learn/Analyse/118.png"],
+                ["learn/Analyse/119.png", "learn/Analyse/120.png"],
+                ["learn/Analyse/121.png", "learn/Analyse/122.png"],
+                ["learn/Analyse/123.png", "learn/Analyse/124.png"],
+                ["learn/Analyse/125.png", "learn/Analyse/126.png"],
+                ["learn/Analyse/127.png", "learn/Analyse/128.png"],
+                ["learn/Analyse/129.png", "learn/Analyse/130.png"],
+                ["learn/Analyse/131.png", "learn/Analyse/132.png"],
+                ["learn/Analyse/133.png", "learn/Analyse/134.png"],
+                ["learn/Analyse/135.png", "learn/Analyse/136.png"],
+                ["learn/Analyse/137.png", "learn/Analyse/138.png"],
+                ["learn/Analyse/139.png", "learn/Analyse/140.png"],
+                ["learn/Analyse/141.png", "learn/Analyse/142.png"],
+                ["learn/Analyse/143.png", "learn/Analyse/144.png"],
+                ["learn/Analyse/145.png", "learn/Analyse/146.png"],
+                ["learn/Analyse/147.png", "learn/Analyse/148.png"],
+                ["learn/Analyse/149.png", "learn/Analyse/150.png"],
+                ["learn/Analyse/151.png", "learn/Analyse/152.png"],
+                ["learn/Analyse/153.png", "learn/Analyse/154.png"],
+                ["learn/Analyse/155.png", "learn/Analyse/156.png"],
+                ["learn/Analyse/157.png", "learn/Analyse/158.png"],
+                ["learn/Analyse/159.png", "learn/Analyse/160.png"],
+                ["learn/Analyse/161.png", "learn/Analyse/162.png"],
+                ["learn/Analyse/163.png", "learn/Analyse/164.png"],
+                ["learn/Trigo/001.png", "learn/Trigo/002.png"],
+                ["learn/Trigo/003.png", "learn/Trigo/004.png"],
+                ["learn/Trigo/005.png", "learn/Trigo/006.png"],
+                ["learn/Trigo/007.png", "learn/Trigo/008.png"],
+                ["learn/Trigo/009.png", "learn/Trigo/010.png"],
+                ["learn/Trigo/011.png", "learn/Trigo/012.png"],
+                ["learn/Trigo/013.png", "learn/Trigo/014.png"],
+                ["learn/Trigo/015.png", "learn/Trigo/016.png"],
+                ["learn/Trigo/017.png", "learn/Trigo/018.png"],
+                ["learn/Trigo/019.png", "learn/Trigo/020.png"],
+                ["learn/Trigo/021.png", "learn/Trigo/022.png"],
+                ["learn/Trigo/023.png", "learn/Trigo/024.png"],
+                ["learn/Trigo/025.png", "learn/Trigo/026.png"],
+                ["learn/Trigo/027.png", "learn/Trigo/028.png"],
+                ["learn/Trigo/029.png", "learn/Trigo/030.png"],
+                ["learn/Trigo/031.png", "learn/Trigo/032.png"],
+                ["learn/Trigo/033.png", "learn/Trigo/034.png"],
+                ["learn/Trigo/035.png", "learn/Trigo/036.png"],
+                ["learn/Trigo/037.png", "learn/Trigo/038.png"],
+                ["learn/Trigo/039.png", "learn/Trigo/040.png"],
+                ["learn/Trigo/041.png", "learn/Trigo/042.png"],
+                ["learn/Trigo/043.png", "learn/Trigo/044.png"],
+                ["learn/Trigo/045.png", "learn/Trigo/046.png"],
+                ["learn/Trigo/047.png", "learn/Trigo/048.png"],
+                ["learn/Trigo/049.png", "learn/Trigo/050.png"],
+                ["learn/Trigo/051.png", "learn/Trigo/052.png"],
+                ["learn/Trigo/053.png", "learn/Trigo/054.png"],
+                ["learn/Trigo/055.png", "learn/Trigo/056.png"],
+                ["learn/Trigo/057.png", "learn/Trigo/058.png"],
+                ["learn/Trigo/059.png", "learn/Trigo/060.png"],
+                ["learn/Trigo/061.png", "learn/Trigo/062.png"],
+                ["learn/Trigo/063.png", "learn/Trigo/064.png"],
+                ["learn/Trigo/065.png", "learn/Trigo/066.png"],
+                ["learn/Trigo/067.png", "learn/Trigo/068.png"],
+                ["learn/Trigo/069.png", "learn/Trigo/070.png"],
+                ["learn/Trigo/071.png", "learn/Trigo/072.png"],
+                ["learn/Trigo/073.png", "learn/Trigo/074.png"],
+                ["learn/Trigo/075.png", "learn/Trigo/076.png"],
+                ["learn/Trigo/077.png", "learn/Trigo/078.png"],
+                ["learn/Trigo/079.png", "learn/Trigo/080.png"],
+                ["learn/Trigo/081.png", "learn/Trigo/082.png"],
+                ["learn/Trigo/083.png", "learn/Trigo/084.png"],
+                ["learn/Algebre_lin/001.png", "learn/Algebre_lin/002.png"],
+                ["learn/Algebre_lin/003.png", "learn/Algebre_lin/004.png"],
+                ["learn/Algebre_lin/005.png", "learn/Algebre_lin/006.png"],
+                ["learn/Algebre_lin/007.png", "learn/Algebre_lin/008.png"],
+                ["learn/Algebre_lin/009.png", "learn/Algebre_lin/010.png"]
+                // Ajoutez d'autres images selon vos besoins
+            ]
+        };
+
+        // Variables d'état
+        let currentSeries = []; // Ordre des images pour la série actuelle
+        let currentIndex = -1;  // Index de l'image actuelle (-1 signifie avant le début)
+        let seriesHistory = []; // Historique des images visualisées dans cette série
+        let showingAnswer = 0;
+
+        // Variables pour la gestion des balayages tactiles
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // Éléments du DOM
+        const imageContainer = document.querySelector(".image-container");
+        const progressText = document.querySelector(".progress");
+        const endMessage = document.querySelector(".end-message");
+        const prevButton = document.getElementById("prev-button");
+        const nextButton = document.getElementById("next-button");
+        const showButton = document.getElementById("show-button");
+
+        // Initialisation du diaporama
+        function initSlideshow() {
+            // Réinitialiser les variables d'état
+            currentIndex = -1;
+            seriesHistory = [];
+            
+            // Créer une copie du tableau d'images pour ne pas modifier l'original
+            const imagesCopy = [...config.image];
+            
+            // Mélanger les images de façon aléatoire (algorithme de Fisher-Yates)
+            for (let i = imagesCopy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [imagesCopy[i], imagesCopy[j]] = [imagesCopy[j], imagesCopy[i]];
+            }
+            
+            // Définir l'ordre de la série actuelle
+            currentSeries = imagesCopy;
+            
+            // Cacher le message de fin s'il était visible
+            endMessage.style.display = "none";
+            
+            // Afficher l'état initial
+            updateDisplay();
+        }
+
+        // Affiche l'image suivante
+        function showNextImage() {
+            if (currentIndex < currentSeries.length - 1) {
+                currentIndex++;
+                seriesHistory.push(currentIndex);
+                updateDisplay();
+            } else {
+                // Fin de la série
+                endMessage.style.display = "block";
+            }
+        }
+
+        // Revenir à l'image précédente
+        function showPreviousImage() {
+            if (seriesHistory.length > 1) {
+                // Supprimer l'index actuel de l'historique
+                seriesHistory.pop();
+                // Obtenir l'index précédent
+                currentIndex = seriesHistory[seriesHistory.length - 1];
+                updateDisplay();
+                
+                // Cacher le message de fin si on revient en arrière depuis la fin
+                endMessage.style.display = "none";
+            }
+        }
+
+        // Mettre à jour l'affichage
+        function updateDisplay() {
+            // S'assurer qu'on n'est pas avant le début ou après la fin
+            if (currentIndex >= 0 && currentIndex < currentSeries.length) {
+                // Créer et afficher l'image
+                
+                
+                // Mettre à jour la réponse
+                if (showingAnswer === 1){
+                    const imagePath = currentSeries[currentIndex][1];
+                    imageContainer.innerHTML = `<img src="${imagePath}" alt="Réponse ${currentIndex + 1}">`;
+                } else {
+                    const imagePath = currentSeries[currentIndex][0];
+                    imageContainer.innerHTML = `<img src="${imagePath}" alt="Question ${currentIndex + 1}">`;
+                }
+
+                // Mettre à jour le texte de progression
+                progressText.textContent = `Vous êtes à l'image ${currentIndex + 1} sur ${currentSeries.length}`;
+            } else if (currentIndex === -1) {
+                // État initial avant le début de la série
+                imageContainer.innerHTML = '<p>Appuyez sur la flèche droite pour commencer</p>';
+                progressText.textContent = `Prêt à démarrer - ${currentSeries.length} images au total`;
+            }
+            
+            // Mettre à jour l'état des boutons
+            updateButtonStates();
+        }
+
+        // Mettre à jour l'état des boutons de navigation
+        function updateButtonStates() {
+            // Désactiver le bouton précédent si on est au début
+            prevButton.disabled = currentIndex <= 0;
+            
+            // Changer le texte du bouton suivant si on est à la fin
+            if (endMessage.style.display === "block") {
+                nextButton.textContent = "↻";  // Symbole de rechargement/recommencer
+            } else {
+                nextButton.textContent = "→";  // Flèche vers la droite
+            }
+        }
+
+        // Gestionnaire d'événements pour les touches
+        function handleKeyPress(event) {
+            // Flèche droite pour l'image suivante
+            if (event.code === "ArrowRight" || event.key === "ArrowRight") {
+                event.preventDefault(); // Empêcher le défilement de la page
+                
+                if (endMessage.style.display === "block") {
+                    // Si on est à la fin, recommencer une nouvelle série
+                    showingAnswer = 0;
+                    initSlideshow();
+                    showNextImage();
+                } else {
+                    showingAnswer = 0;
+                    showNextImage();
+                }
+            }
+            
+            // Flèche gauche pour revenir en arrière
+            if (event.code === "ArrowLeft" || event.key === "ArrowLeft") {
+                event.preventDefault(); // Empêcher le défilement horizontal
+                if (currentIndex > 0) { // Vérifier qu'on n'est pas au début
+                    showingAnswer = 0;
+                    showPreviousImage();
+                }
+            }
+
+            if (event.code === "Space" || event.key === "Space") {
+                event.preventDefault(); // Empêcher le défilement horizontal
+                if (currentIndex >= 0) { // Vérifier qu'on n'est pas au début
+                    showingAnswer =  1 - showingAnswer * showingAnswer;
+                    updateDisplay();
+                }
+            }
+        }
+
+        // Ajouter l'écouteur d'événements pour les touches
+        document.addEventListener("keydown", handleKeyPress);
+
+        // Initialiser les écouteurs d'événements tactiles
+        initTouchEvents();
+
+        // Initialiser le diaporama au chargement de la page
+        window.addEventListener("load", () => {
+            initSlideshow();
+            updateButtonStates();
+        });
+
+        // Fonction pour initialiser les événements tactiles
+        function initTouchEvents() {
+            document.addEventListener('touchstart', handleTouchStart, false);
+            document.addEventListener('touchend', handleTouchEnd, false);
+            
+            // Ajouter les écouteurs d'événements pour les boutons
+            prevButton.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    showingAnswer = 0;
+                    showPreviousImage();
+                }
+            });
+
+            showButton.addEventListener('click', () => {
+                if (currentIndex >= 0) {
+                    showingAnswer =  1 - showingAnswer * showingAnswer;
+                    updateDisplay();
+                }
+            });
+            
+            nextButton.addEventListener('click', () => {
+                if (endMessage.style.display === "block") {
+                    // Si on est à la fin, recommencer une nouvelle série
+                    showingAnswer = 0;
+                    initSlideshow();
+                    showNextImage();
+                } else {
+                    showingAnswer = 0;
+                    showNextImage();
+                }
+            });
+        }
+
+        // Gestionnaire pour le début d'un toucher
+        function handleTouchStart(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        }
+
+        // Gestionnaire pour la fin d'un toucher
+        function handleTouchEnd(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        }
+
+        // Fonction pour gérer les balayages
+        function handleSwipe() {
+            const swipeThreshold = 50; // Distance minimale pour considérer un balayage
+            
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Balayage vers la gauche (équivalent à flèche droite - image suivante)
+                if (endMessage.style.display === "block") {
+                    // Si on est à la fin, recommencer une nouvelle série
+                    showingAnswer = 0;
+                    initSlideshow();
+                    showNextImage();
+                } else {
+                    showingAnswer = 0;
+                    showNextImage();
+                }
+            }
+            
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Balayage vers la droite (équivalent à flèche gauche - image précédente)
+                if (currentIndex > 0) { // Vérifier qu'on n'est pas au début
+                    showingAnswer = 0;
+                    showPreviousImage();
+                }
+            }
+        }        
+    </script>
+</body>
+</html>
