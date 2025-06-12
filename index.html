@@ -47,12 +47,6 @@
             font-weight: bold;
             display: none;
         }
-        .instructions {
-            margin-top: 30px;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        }
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -71,10 +65,6 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        .nav-button:activated {
-            background-color: #6eafdb;
-            cursor: not-allowed;
         }
         .nav-button:disabled {
             background-color: #ccc;
@@ -108,21 +98,11 @@
                 color: #777;
                 margin: 10px 0;
             }
-            .instructions p {
-                font-size: 14px;
-            }
         }
     </style>
 </head>
 <body>
     <h1>General culture</h1>
-    
-    <div class="nav-buttons">
-        <button id="prev-button" class="nav-button">←</button>
-        <button id="unknown-button" class="nav-button">❗</button>
-        <button id="show-button" class="nav-button">🧐</button>
-        <button id="next-button" class="nav-button">→</button>
-    </div>
     
     <div class="image-container">
         <!-- L'image sera insérée ici par JavaScript -->
@@ -137,6 +117,13 @@
     </div>
     
     <p class="swipe-hint">Balayez vers la gauche ou la droite pour naviguer</p>
+
+    <div class="nav-buttons">
+        <button id="prev-button" class="nav-button">←</button>
+        <button id="unknown-button" class="nav-button">❗</button>
+        <button id="show-button" class="nav-button">🧐</button>
+        <button id="next-button" class="nav-button">→</button>
+    </div>
     
     <div class="instructions">
         <p>Utilisez la <strong>Flèche droite →</strong> pour afficher l'image suivante</p>
