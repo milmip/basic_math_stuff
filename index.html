@@ -72,6 +72,10 @@
             align-items: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+        .nav-button:activated {
+            background-color: #6eafdb;
+            cursor: not-allowed;
+        }
         .nav-button:disabled {
             background-color: #ccc;
             cursor: not-allowed;
@@ -115,6 +119,7 @@
     
     <div class="nav-buttons">
         <button id="prev-button" class="nav-button">←</button>
+        <button id="unknown-button" class="nav-button">❗</button>
         <button id="show-button" class="nav-button">🧐</button>
         <button id="next-button" class="nav-button">→</button>
     </div>
@@ -144,143 +149,143 @@
         const config = {
             // Liste des noms de fichiers d'images (à remplacer par vos noms réels)
             image: [
-                ["learn/Algebre/001.png", "learn/Algebre/002.png"],
-                ["learn/Algebre/003.png", "learn/Algebre/004.png"],
-                ["learn/Algebre/005.png", "learn/Algebre/006.png"],
-                ["learn/Algebre/007.png", "learn/Algebre/008.png"],
-                ["learn/Algebre/009.png", "learn/Algebre/010.png"],
-                ["learn/Algebre/011.png", "learn/Algebre/012.png"],
-                ["learn/Algebre/013.png", "learn/Algebre/014.png"],
-                ["learn/Algebre/015.png", "learn/Algebre/016.png"],
-                ["learn/Analyse/001.png", "learn/Analyse/002.png"],
-                ["learn/Analyse/003.png", "learn/Analyse/004.png"],
-                ["learn/Analyse/005.png", "learn/Analyse/006.png"],
-                ["learn/Analyse/007.png", "learn/Analyse/008.png"],
-                ["learn/Analyse/009.png", "learn/Analyse/010.png"],
-                ["learn/Analyse/011.png", "learn/Analyse/012.png"],
-                ["learn/Analyse/013.png", "learn/Analyse/014.png"],
-                ["learn/Analyse/015.png", "learn/Analyse/016.png"],
-                ["learn/Analyse/017.png", "learn/Analyse/018.png"],
-                ["learn/Analyse/019.png", "learn/Analyse/020.png"],
-                ["learn/Analyse/021.png", "learn/Analyse/022.png"],
-                ["learn/Analyse/023.png", "learn/Analyse/024.png"],
-                ["learn/Analyse/025.png", "learn/Analyse/026.png"],
-                ["learn/Analyse/027.png", "learn/Analyse/028.png"],
-                ["learn/Analyse/029.png", "learn/Analyse/030.png"],
-                ["learn/Analyse/031.png", "learn/Analyse/032.png"],
-                ["learn/Analyse/033.png", "learn/Analyse/034.png"],
-                ["learn/Analyse/035.png", "learn/Analyse/036.png"],
-                ["learn/Analyse/037.png", "learn/Analyse/038.png"],
-                ["learn/Analyse/039.png", "learn/Analyse/040.png"],
-                ["learn/Analyse/041.png", "learn/Analyse/042.png"],
-                ["learn/Analyse/043.png", "learn/Analyse/044.png"],
-                ["learn/Analyse/045.png", "learn/Analyse/046.png"],
-                ["learn/Analyse/047.png", "learn/Analyse/048.png"],
-                ["learn/Analyse/049.png", "learn/Analyse/050.png"],
-                ["learn/Analyse/051.png", "learn/Analyse/052.png"],
-                ["learn/Analyse/053.png", "learn/Analyse/054.png"],
-                ["learn/Analyse/055.png", "learn/Analyse/056.png"],
-                ["learn/Analyse/057.png", "learn/Analyse/058.png"],
-                ["learn/Analyse/059.png", "learn/Analyse/060.png"],
-                ["learn/Analyse/061.png", "learn/Analyse/062.png"],
-                ["learn/Analyse/063.png", "learn/Analyse/064.png"],
-                ["learn/Analyse/065.png", "learn/Analyse/066.png"],
-                ["learn/Analyse/067.png", "learn/Analyse/068.png"],
-                ["learn/Analyse/069.png", "learn/Analyse/070.png"],
-                ["learn/Analyse/071.png", "learn/Analyse/072.png"],
-                ["learn/Analyse/073.png", "learn/Analyse/074.png"],
-                ["learn/Analyse/075.png", "learn/Analyse/076.png"],
-                ["learn/Analyse/077.png", "learn/Analyse/078.png"],
-                ["learn/Analyse/079.png", "learn/Analyse/080.png"],
-                ["learn/Analyse/081.png", "learn/Analyse/082.png"],
-                ["learn/Analyse/083.png", "learn/Analyse/084.png"],
-                ["learn/Analyse/085.png", "learn/Analyse/086.png"],
-                ["learn/Analyse/087.png", "learn/Analyse/088.png"],
-                ["learn/Analyse/089.png", "learn/Analyse/090.png"],
-                ["learn/Analyse/091.png", "learn/Analyse/092.png"],
-                ["learn/Analyse/093.png", "learn/Analyse/094.png"],
-                ["learn/Analyse/095.png", "learn/Analyse/096.png"],
-                ["learn/Analyse/097.png", "learn/Analyse/098.png"],
-                ["learn/Analyse/099.png", "learn/Analyse/100.png"],
-                ["learn/Analyse/101.png", "learn/Analyse/102.png"],
-                ["learn/Analyse/103.png", "learn/Analyse/104.png"],
-                ["learn/Analyse/105.png", "learn/Analyse/106.png"],
-                ["learn/Analyse/107.png", "learn/Analyse/108.png"],
-                ["learn/Analyse/109.png", "learn/Analyse/110.png"],
-                ["learn/Analyse/111.png", "learn/Analyse/112.png"],
-                ["learn/Analyse/113.png", "learn/Analyse/114.png"],
-                ["learn/Analyse/115.png", "learn/Analyse/116.png"],
-                ["learn/Analyse/117.png", "learn/Analyse/118.png"],
-                ["learn/Analyse/119.png", "learn/Analyse/120.png"],
-                ["learn/Analyse/121.png", "learn/Analyse/122.png"],
-                ["learn/Analyse/123.png", "learn/Analyse/124.png"],
-                ["learn/Analyse/125.png", "learn/Analyse/126.png"],
-                ["learn/Analyse/127.png", "learn/Analyse/128.png"],
-                ["learn/Analyse/129.png", "learn/Analyse/130.png"],
-                ["learn/Analyse/131.png", "learn/Analyse/132.png"],
-                ["learn/Analyse/133.png", "learn/Analyse/134.png"],
-                ["learn/Analyse/135.png", "learn/Analyse/136.png"],
-                ["learn/Analyse/137.png", "learn/Analyse/138.png"],
-                ["learn/Analyse/139.png", "learn/Analyse/140.png"],
-                ["learn/Analyse/141.png", "learn/Analyse/142.png"],
-                ["learn/Analyse/143.png", "learn/Analyse/144.png"],
-                ["learn/Analyse/145.png", "learn/Analyse/146.png"],
-                ["learn/Analyse/147.png", "learn/Analyse/148.png"],
-                ["learn/Analyse/149.png", "learn/Analyse/150.png"],
-                ["learn/Analyse/151.png", "learn/Analyse/152.png"],
-                ["learn/Analyse/153.png", "learn/Analyse/154.png"],
-                ["learn/Analyse/155.png", "learn/Analyse/156.png"],
-                ["learn/Analyse/157.png", "learn/Analyse/158.png"],
-                ["learn/Analyse/159.png", "learn/Analyse/160.png"],
-                ["learn/Analyse/161.png", "learn/Analyse/162.png"],
-                ["learn/Analyse/163.png", "learn/Analyse/164.png"],
-                ["learn/Trigo/001.png", "learn/Trigo/002.png"],
-                ["learn/Trigo/003.png", "learn/Trigo/004.png"],
-                ["learn/Trigo/005.png", "learn/Trigo/006.png"],
-                ["learn/Trigo/007.png", "learn/Trigo/008.png"],
-                ["learn/Trigo/009.png", "learn/Trigo/010.png"],
-                ["learn/Trigo/011.png", "learn/Trigo/012.png"],
-                ["learn/Trigo/013.png", "learn/Trigo/014.png"],
-                ["learn/Trigo/015.png", "learn/Trigo/016.png"],
-                ["learn/Trigo/017.png", "learn/Trigo/018.png"],
-                ["learn/Trigo/019.png", "learn/Trigo/020.png"],
-                ["learn/Trigo/021.png", "learn/Trigo/022.png"],
-                ["learn/Trigo/023.png", "learn/Trigo/024.png"],
-                ["learn/Trigo/025.png", "learn/Trigo/026.png"],
-                ["learn/Trigo/027.png", "learn/Trigo/028.png"],
-                ["learn/Trigo/029.png", "learn/Trigo/030.png"],
-                ["learn/Trigo/031.png", "learn/Trigo/032.png"],
-                ["learn/Trigo/033.png", "learn/Trigo/034.png"],
-                ["learn/Trigo/035.png", "learn/Trigo/036.png"],
-                ["learn/Trigo/037.png", "learn/Trigo/038.png"],
-                ["learn/Trigo/039.png", "learn/Trigo/040.png"],
-                ["learn/Trigo/041.png", "learn/Trigo/042.png"],
-                ["learn/Trigo/043.png", "learn/Trigo/044.png"],
-                ["learn/Trigo/045.png", "learn/Trigo/046.png"],
-                ["learn/Trigo/047.png", "learn/Trigo/048.png"],
-                ["learn/Trigo/049.png", "learn/Trigo/050.png"],
-                ["learn/Trigo/051.png", "learn/Trigo/052.png"],
-                ["learn/Trigo/053.png", "learn/Trigo/054.png"],
-                ["learn/Trigo/055.png", "learn/Trigo/056.png"],
-                ["learn/Trigo/057.png", "learn/Trigo/058.png"],
-                ["learn/Trigo/059.png", "learn/Trigo/060.png"],
-                ["learn/Trigo/061.png", "learn/Trigo/062.png"],
-                ["learn/Trigo/063.png", "learn/Trigo/064.png"],
-                ["learn/Trigo/065.png", "learn/Trigo/066.png"],
-                ["learn/Trigo/067.png", "learn/Trigo/068.png"],
-                ["learn/Trigo/069.png", "learn/Trigo/070.png"],
-                ["learn/Trigo/071.png", "learn/Trigo/072.png"],
-                ["learn/Trigo/073.png", "learn/Trigo/074.png"],
-                ["learn/Trigo/075.png", "learn/Trigo/076.png"],
-                ["learn/Trigo/077.png", "learn/Trigo/078.png"],
-                ["learn/Trigo/079.png", "learn/Trigo/080.png"],
-                ["learn/Trigo/081.png", "learn/Trigo/082.png"],
-                ["learn/Trigo/083.png", "learn/Trigo/084.png"],
-                ["learn/Algebre_lin/001.png", "learn/Algebre_lin/002.png"],
-                ["learn/Algebre_lin/003.png", "learn/Algebre_lin/004.png"],
-                ["learn/Algebre_lin/005.png", "learn/Algebre_lin/006.png"],
-                ["learn/Algebre_lin/007.png", "learn/Algebre_lin/008.png"],
-                ["learn/Algebre_lin/009.png", "learn/Algebre_lin/010.png"]
+                ["learn/Algebre/001.png", "learn/Algebre/002.png", 0],
+                ["learn/Algebre/003.png", "learn/Algebre/004.png", 1],
+                ["learn/Algebre/005.png", "learn/Algebre/006.png", 2],
+                ["learn/Algebre/007.png", "learn/Algebre/008.png", 3],
+                ["learn/Algebre/009.png", "learn/Algebre/010.png", 4],
+                ["learn/Algebre/011.png", "learn/Algebre/012.png", 5],
+                ["learn/Algebre/013.png", "learn/Algebre/014.png", 6],
+                ["learn/Algebre/015.png", "learn/Algebre/016.png", 7],
+                ["learn/Analyse/001.png", "learn/Analyse/002.png", 8],
+                ["learn/Analyse/003.png", "learn/Analyse/004.png", 9],
+                ["learn/Analyse/005.png", "learn/Analyse/006.png", 10],
+                ["learn/Analyse/007.png", "learn/Analyse/008.png", 11],
+                ["learn/Analyse/009.png", "learn/Analyse/010.png", 12],
+                ["learn/Analyse/011.png", "learn/Analyse/012.png", 13],
+                ["learn/Analyse/013.png", "learn/Analyse/014.png", 14],
+                ["learn/Analyse/015.png", "learn/Analyse/016.png", 15],
+                ["learn/Analyse/017.png", "learn/Analyse/018.png", 16],
+                ["learn/Analyse/019.png", "learn/Analyse/020.png", 17],
+                ["learn/Analyse/021.png", "learn/Analyse/022.png", 18],
+                ["learn/Analyse/023.png", "learn/Analyse/024.png", 19],
+                ["learn/Analyse/025.png", "learn/Analyse/026.png", 20],
+                ["learn/Analyse/027.png", "learn/Analyse/028.png", 21],
+                ["learn/Analyse/029.png", "learn/Analyse/030.png", 22],
+                ["learn/Analyse/031.png", "learn/Analyse/032.png", 23],
+                ["learn/Analyse/033.png", "learn/Analyse/034.png", 24],
+                ["learn/Analyse/035.png", "learn/Analyse/036.png", 25],
+                ["learn/Analyse/037.png", "learn/Analyse/038.png", 26],
+                ["learn/Analyse/039.png", "learn/Analyse/040.png", 27],
+                ["learn/Analyse/041.png", "learn/Analyse/042.png", 28],
+                ["learn/Analyse/043.png", "learn/Analyse/044.png", 29],
+                ["learn/Analyse/045.png", "learn/Analyse/046.png", 30],
+                ["learn/Analyse/047.png", "learn/Analyse/048.png", 31],
+                ["learn/Analyse/049.png", "learn/Analyse/050.png", 32],
+                ["learn/Analyse/051.png", "learn/Analyse/052.png", 33],
+                ["learn/Analyse/053.png", "learn/Analyse/054.png", 34],
+                ["learn/Analyse/055.png", "learn/Analyse/056.png", 35],
+                ["learn/Analyse/057.png", "learn/Analyse/058.png", 36],
+                ["learn/Analyse/059.png", "learn/Analyse/060.png", 37],
+                ["learn/Analyse/061.png", "learn/Analyse/062.png", 38],
+                ["learn/Analyse/063.png", "learn/Analyse/064.png", 39],
+                ["learn/Analyse/065.png", "learn/Analyse/066.png", 40],
+                ["learn/Analyse/067.png", "learn/Analyse/068.png", 41],
+                ["learn/Analyse/069.png", "learn/Analyse/070.png", 42],
+                ["learn/Analyse/071.png", "learn/Analyse/072.png", 43],
+                ["learn/Analyse/073.png", "learn/Analyse/074.png", 44],
+                ["learn/Analyse/075.png", "learn/Analyse/076.png", 45],
+                ["learn/Analyse/077.png", "learn/Analyse/078.png", 46],
+                ["learn/Analyse/079.png", "learn/Analyse/080.png", 47],
+                ["learn/Analyse/081.png", "learn/Analyse/082.png", 48],
+                ["learn/Analyse/083.png", "learn/Analyse/084.png", 49],
+                ["learn/Analyse/085.png", "learn/Analyse/086.png", 50],
+                ["learn/Analyse/087.png", "learn/Analyse/088.png", 51],
+                ["learn/Analyse/089.png", "learn/Analyse/090.png", 52],
+                ["learn/Analyse/091.png", "learn/Analyse/092.png", 53],
+                ["learn/Analyse/093.png", "learn/Analyse/094.png", 54],
+                ["learn/Analyse/095.png", "learn/Analyse/096.png", 55],
+                ["learn/Analyse/097.png", "learn/Analyse/098.png", 56],
+                ["learn/Analyse/099.png", "learn/Analyse/100.png", 57],
+                ["learn/Analyse/101.png", "learn/Analyse/102.png", 58],
+                ["learn/Analyse/103.png", "learn/Analyse/104.png", 59],
+                ["learn/Analyse/105.png", "learn/Analyse/106.png", 60],
+                ["learn/Analyse/107.png", "learn/Analyse/108.png", 61],
+                ["learn/Analyse/109.png", "learn/Analyse/110.png", 62],
+                ["learn/Analyse/111.png", "learn/Analyse/112.png", 63],
+                ["learn/Analyse/113.png", "learn/Analyse/114.png", 64],
+                ["learn/Analyse/115.png", "learn/Analyse/116.png", 65],
+                ["learn/Analyse/117.png", "learn/Analyse/118.png", 66],
+                ["learn/Analyse/119.png", "learn/Analyse/120.png", 67],
+                ["learn/Analyse/121.png", "learn/Analyse/122.png", 68],
+                ["learn/Analyse/123.png", "learn/Analyse/124.png", 69],
+                ["learn/Analyse/125.png", "learn/Analyse/126.png", 70],
+                ["learn/Analyse/127.png", "learn/Analyse/128.png", 71],
+                ["learn/Analyse/129.png", "learn/Analyse/130.png", 72],
+                ["learn/Analyse/131.png", "learn/Analyse/132.png", 73],
+                ["learn/Analyse/133.png", "learn/Analyse/134.png", 74],
+                ["learn/Analyse/135.png", "learn/Analyse/136.png", 75],
+                ["learn/Analyse/137.png", "learn/Analyse/138.png", 76],
+                ["learn/Analyse/139.png", "learn/Analyse/140.png", 77],
+                ["learn/Analyse/141.png", "learn/Analyse/142.png", 78],
+                ["learn/Analyse/143.png", "learn/Analyse/144.png", 79],
+                ["learn/Analyse/145.png", "learn/Analyse/146.png", 80],
+                ["learn/Analyse/147.png", "learn/Analyse/148.png", 81],
+                ["learn/Analyse/149.png", "learn/Analyse/150.png", 82],
+                ["learn/Analyse/151.png", "learn/Analyse/152.png", 83],
+                ["learn/Analyse/153.png", "learn/Analyse/154.png", 84],
+                ["learn/Analyse/155.png", "learn/Analyse/156.png", 85],
+                ["learn/Analyse/157.png", "learn/Analyse/158.png", 86],
+                ["learn/Analyse/159.png", "learn/Analyse/160.png", 87],
+                ["learn/Analyse/161.png", "learn/Analyse/162.png", 88],
+                ["learn/Analyse/163.png", "learn/Analyse/164.png", 89],
+                ["learn/Trigo/001.png", "learn/Trigo/002.png", 90],
+                ["learn/Trigo/003.png", "learn/Trigo/004.png", 91],
+                ["learn/Trigo/005.png", "learn/Trigo/006.png", 92],
+                ["learn/Trigo/007.png", "learn/Trigo/008.png", 93],
+                ["learn/Trigo/009.png", "learn/Trigo/010.png", 94],
+                ["learn/Trigo/011.png", "learn/Trigo/012.png", 95],
+                ["learn/Trigo/013.png", "learn/Trigo/014.png", 96],
+                ["learn/Trigo/015.png", "learn/Trigo/016.png", 97],
+                ["learn/Trigo/017.png", "learn/Trigo/018.png", 98],
+                ["learn/Trigo/019.png", "learn/Trigo/020.png", 99],
+                ["learn/Trigo/021.png", "learn/Trigo/022.png", 100],
+                ["learn/Trigo/023.png", "learn/Trigo/024.png", 101],
+                ["learn/Trigo/025.png", "learn/Trigo/026.png", 102],
+                ["learn/Trigo/027.png", "learn/Trigo/028.png", 103],
+                ["learn/Trigo/029.png", "learn/Trigo/030.png", 104],
+                ["learn/Trigo/031.png", "learn/Trigo/032.png", 105],
+                ["learn/Trigo/033.png", "learn/Trigo/034.png", 106],
+                ["learn/Trigo/035.png", "learn/Trigo/036.png", 107],
+                ["learn/Trigo/037.png", "learn/Trigo/038.png", 108],
+                ["learn/Trigo/039.png", "learn/Trigo/040.png", 109],
+                ["learn/Trigo/041.png", "learn/Trigo/042.png", 110],
+                ["learn/Trigo/043.png", "learn/Trigo/044.png", 111],
+                ["learn/Trigo/045.png", "learn/Trigo/046.png", 112],
+                ["learn/Trigo/047.png", "learn/Trigo/048.png", 113],
+                ["learn/Trigo/049.png", "learn/Trigo/050.png", 114],
+                ["learn/Trigo/051.png", "learn/Trigo/052.png", 115],
+                ["learn/Trigo/053.png", "learn/Trigo/054.png", 116],
+                ["learn/Trigo/055.png", "learn/Trigo/056.png", 117],
+                ["learn/Trigo/057.png", "learn/Trigo/058.png", 118],
+                ["learn/Trigo/059.png", "learn/Trigo/060.png", 119],
+                ["learn/Trigo/061.png", "learn/Trigo/062.png", 120],
+                ["learn/Trigo/063.png", "learn/Trigo/064.png", 121],
+                ["learn/Trigo/065.png", "learn/Trigo/066.png", 122],
+                ["learn/Trigo/067.png", "learn/Trigo/068.png", 123],
+                ["learn/Trigo/069.png", "learn/Trigo/070.png", 124],
+                ["learn/Trigo/071.png", "learn/Trigo/072.png", 125],
+                ["learn/Trigo/073.png", "learn/Trigo/074.png", 126],
+                ["learn/Trigo/075.png", "learn/Trigo/076.png", 127],
+                ["learn/Trigo/077.png", "learn/Trigo/078.png", 128],
+                ["learn/Trigo/079.png", "learn/Trigo/080.png", 129],
+                ["learn/Trigo/081.png", "learn/Trigo/082.png", 130],
+                ["learn/Trigo/083.png", "learn/Trigo/084.png", 131],
+                ["learn/Algebre_lin/001.png", "learn/Algebre_lin/002.png", 132],
+                ["learn/Algebre_lin/003.png", "learn/Algebre_lin/004.png", 133],
+                ["learn/Algebre_lin/005.png", "learn/Algebre_lin/006.png", 134],
+                ["learn/Algebre_lin/007.png", "learn/Algebre_lin/008.png", 135],
+                ["learn/Algebre_lin/009.png", "learn/Algebre_lin/010.png", 136]
                 // Ajoutez d'autres images selon vos besoins
             ]
         };
@@ -290,6 +295,9 @@
         let currentIndex = -1;  // Index de l'image actuelle (-1 signifie avant le début)
         let seriesHistory = []; // Historique des images visualisées dans cette série
         let showingAnswer = 0;
+        const imageConfig = [...config.image];
+        let unknown = Array(imageConfig.length).fill(1);
+
 
         // Variables pour la gestion des balayages tactiles
         let touchStartX = 0;
@@ -302,6 +310,7 @@
         const prevButton = document.getElementById("prev-button");
         const nextButton = document.getElementById("next-button");
         const showButton = document.getElementById("show-button");
+        const unknownButton = document.getElementById("unknown-button");
 
         // Initialisation du diaporama
         function initSlideshow() {
@@ -310,14 +319,24 @@
             seriesHistory = [];
             
             // Créer une copie du tableau d'images pour ne pas modifier l'original
-            const imagesCopy = [...config.image];
-            
+            imagesCopy = Array(unknown.reduce((acc, val) => acc + val, 0));
+            j = 0;
+            for (let i = 0; i < unknown.length; i++) {
+                if (unknown[i] == 1) {
+                    imagesCopy[j] = imageConfig[i];
+                    j++;
+                }
+            }
+
             // Mélanger les images de façon aléatoire (algorithme de Fisher-Yates)
             for (let i = imagesCopy.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [imagesCopy[i], imagesCopy[j]] = [imagesCopy[j], imagesCopy[i]];
             }
             
+            //Définir la liste des unkown
+            unknown = Array(imagesCopy.length).fill(0);
+
             // Définir l'ordre de la série actuelle
             currentSeries = imagesCopy;
             
@@ -326,6 +345,7 @@
             
             // Afficher l'état initial
             updateDisplay();
+            //console.log(unknown[currentSeries[0][2]]);
         }
 
         // Affiche l'image suivante
@@ -356,6 +376,7 @@
 
         // Mettre à jour l'affichage
         function updateDisplay() {
+            
             // S'assurer qu'on n'est pas avant le début ou après la fin
             if (currentIndex >= 0 && currentIndex < currentSeries.length) {
                 // Créer et afficher l'image
@@ -386,6 +407,9 @@
         function updateButtonStates() {
             // Désactiver le bouton précédent si on est au début
             prevButton.disabled = currentIndex <= 0;
+
+            // Désactiver le bouton unknow si activé
+            unknownButton.disabled = currentIndex < 0 || unknown[currentSeries[currentIndex][2]] == 1;
             
             // Changer le texte du bouton suivant si on est à la fin
             if (endMessage.style.display === "block") {
@@ -428,6 +452,13 @@
                     updateDisplay();
                 }
             }
+
+            if (event.code === "m" || event.key === "m") {
+                if (currentIndex >= 0) { // Vérifier qu'on n'est pas au début
+                    unknown[currentSeries[currentIndex][2]] = 1;
+                    updateDisplay();
+                }
+            }
         }
 
         // Ajouter l'écouteur d'événements pour les touches
@@ -455,6 +486,13 @@
                 }
             });
 
+            unknownButton.addEventListener('click', () => {
+                if (currentIndex >= 0) {
+                    unknown[currentSeries[currentIndex][2]] = 1;
+                    updateDisplay();
+                }
+            });
+
             showButton.addEventListener('click', () => {
                 if (currentIndex >= 0) {
                     showingAnswer =  1 - showingAnswer * showingAnswer;
@@ -467,7 +505,7 @@
                     // Si on est à la fin, recommencer une nouvelle série
                     showingAnswer = 0;
                     initSlideshow();
-                    showNextImage();
+                    //showNextImage();
                 } else {
                     showingAnswer = 0;
                     showNextImage();
