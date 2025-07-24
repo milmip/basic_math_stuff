@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Principale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .selected-lists {
+            background-color: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            margin: 20px 0;
+        }
+        .selected-lists p {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .lists-display {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            opacity: 0.8;
+        }
+        .error {
+            color: red;
+            background-color: #ffe6e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Application Principale</h1>
+        
+        <div id="content">
+            <!-- Le contenu sera généré par JavaScript -->
+        </div>
+        
+        <a href="index.html" class="back-btn">← Retour à la sélection</a>
+    </div>
+
+    <script>
+        // Variables globales pour stocker les listes sélectionnées
+        let selectedLists = [];
+        
+        // Fonction pour récupérer les paramètres URL
+        function getUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const listsParam = urlParams.get('lists');
+            
+            if (listsParam) {
+                return listsParam.split(',').filter(list => list.trim() !== '');
+            }
+            return [];
+        }
+        
+        // Fonction pour afficher les listes sélectionnées
+        function displaySelectedLists() {
+            const contentDiv = document.getElementById('content');
+            
+            if (selectedLists.length === 0) {
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <p>Aucune liste n'a été sélectionnée. Veuillez retourner à la page de sélection.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Créer la phrase avec les noms des dossiers
+            let listText;
+            if (selectedLists.length === 1) {
+                listText = `la liste <span class="lists-display">${selectedLists[0]}</span>`;
+            } else if (selectedLists.length === 2) {
+                listText = `les listes <span class="lists-display">${selectedLists.join(' et ')}</span>`;
+            } else {
+                const lastList = selectedLists.pop();
+                listText = `les listes <span class="lists-display">${selectedLists.join(', ')} et ${lastList}</span>`;
+                selectedLists.push(lastList); // Remettre le dernier élément
+            }
+            
+            contentDiv.innerHTML = `
+                <div class="selected-lists">
+                    <p>Vous avez sélectionné ${listText} pour cette session.</p>
+                </div>
+            `;
+        }
+        
+        // Initialisation de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Récupérer les listes depuis les paramètres URL
+            selectedLists = getUrlParameters();
+            
+            // Afficher les listes sélectionnées
+            displaySelectedLists();
+            
+            // Log pour le développement (peut être retiré en production)
+            console.log('Listes sélectionnées:', selectedLists);
+        });
+        
+        // Fonction utilitaire pour accéder aux listes sélectionnées depuis d'autres scripts
+        function getSelectedLists() {
+            return selectedLists;
+        }
+    </script>
+</body>
+</html>

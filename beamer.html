@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General culture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+            touch-action: pan-y; /* Permettre le scroll vertical mais désactiver le scroll horizontal */
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .image-container {
+            margin: 20px 0;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .answer {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #555;
+            font-weight: bold;
+        }
+        .progress {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #555;
+        }
+        .end-message {
+            font-size: 24px;
+            color: #e74c3c;
+            font-weight: bold;
+            display: none;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .nav-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .swipe-hint {
+            display: none;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Styles responsives pour mobile */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+            .image-container {
+                min-height: 200px;
+            }
+            .swipe-hint {
+                display: block;
+                font-style: italic;
+                color: #777;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>General culture</h1>
+    
+    <div class="image-container">
+        <!-- L'image sera insérée ici par JavaScrip -->
+    </div>
+    
+    <div class="progress">
+        <!-- Le message de progression sera inséré ici par JavaScript -->
+    </div>
+    
+    <div class="end-message">
+        Fin de série, on recommence
+    </div>
+    
+    <p class="swipe-hint">Balayez vers la gauche ou la droite pour naviguer</p>
+
+    <div class="nav-buttons">
+        <button id="prev-button" class="nav-button">←</button>
+        <button id="unknown-button" class="nav-button">❗</button>
+        <button id="show-button" class="nav-button">🧐</button>
+        <button id="next-button" class="nav-button">→</button>
+    </div>
+    
+    <div class="instructions">
+        <p>Utilisez la <strong>Flèche droite →</strong> pour afficher l'image suivante</p>
+        <p>Utilisez la <strong>Flèche gauche ←</strong> pour revenir à l'image précédente</p>
+        <p>Sur mobile : <strong>balayez</strong> l'écran ou utilisez les <strong>boutons</strong></p>
+    </div>
+
+    <script type="text/javascript">
+        // Configuration du diaporama 
+        const config = {
+            // Liste des noms de fichiers d'images (à remplacer par vos noms réels)
+            image: [
+                ["img/Algebre/001.png", "img/Algebre/002.png", 0],
+                ["img/Algebre/003.png", "img/Algebre/004.png", 1],
+                ["img/Algebre/005.png", "img/Algebre/006.png", 2],
+                ["img/Algebre/007.png", "img/Algebre/008.png", 3],
+                ["img/Algebre/009.png", "img/Algebre/010.png", 4],
+                ["img/Algebre/011.png", "img/Algebre/012.png", 5],
+                ["img/Algebre/013.png", "img/Algebre/014.png", 6],
+                ["img/Algebre/015.png", "img/Algebre/016.png", 7],
+                ["img/Analyse/001.png", "img/Analyse/002.png", 8],
+                ["img/Analyse/003.png", "img/Analyse/004.png", 9],
+                ["img/Analyse/005.png", "img/Analyse/006.png", 10],
+                ["img/Analyse/007.png", "img/Analyse/008.png", 11],
+                ["img/Analyse/009.png", "img/Analyse/010.png", 12],
+                ["img/Analyse/011.png", "img/Analyse/012.png", 13],
+                ["img/Analyse/013.png", "img/Analyse/014.png", 14],
+                ["img/Analyse/015.png", "img/Analyse/016.png", 15],
+                ["img/Analyse/017.png", "img/Analyse/018.png", 16],
+                ["img/Analyse/019.png", "img/Analyse/020.png", 17],
+                ["img/Analyse/021.png", "img/Analyse/022.png", 18],
+                ["img/Analyse/023.png", "img/Analyse/024.png", 19],
+                ["img/Analyse/025.png", "img/Analyse/026.png", 20],
+                ["img/Analyse/027.png", "img/Analyse/028.png", 21],
+                ["img/Analyse/029.png", "img/Analyse/030.png", 22],
+                ["img/Analyse/031.png", "img/Analyse/032.png", 23],
+                ["img/Analyse/033.png", "img/Analyse/034.png", 24],
+                ["img/Analyse/035.png", "img/Analyse/036.png", 25],
+                ["img/Analyse/037.png", "img/Analyse/038.png", 26],
+                ["img/Analyse/039.png", "img/Analyse/040.png", 27],
+                ["img/Analyse/041.png", "img/Analyse/042.png", 28],
+                ["img/Analyse/043.png", "img/Analyse/044.png", 29],
+                ["img/Analyse/045.png", "img/Analyse/046.png", 30],
+                ["img/Analyse/047.png", "img/Analyse/048.png", 31],
+                ["img/Analyse/049.png", "img/Analyse/050.png", 32],
+                ["img/Analyse/051.png", "img/Analyse/052.png", 33],
+                ["img/Analyse/053.png", "img/Analyse/054.png", 34],
+                ["img/Analyse/055.png", "img/Analyse/056.png", 35],
+                ["img/Analyse/057.png", "img/Analyse/058.png", 36],
+                ["img/Analyse/059.png", "img/Analyse/060.png", 37],
+                ["img/Analyse/061.png", "img/Analyse/062.png", 38],
+                ["img/Analyse/063.png", "img/Analyse/064.png", 39],
+                ["img/Analyse/065.png", "img/Analyse/066.png", 40],
+                ["img/Analyse/067.png", "img/Analyse/068.png", 41],
+                ["img/Analyse/069.png", "img/Analyse/070.png", 42],
+                ["img/Analyse/071.png", "img/Analyse/072.png", 43],
+                ["img/Analyse/073.png", "img/Analyse/074.png", 44],
+                ["img/Analyse/075.png", "img/Analyse/076.png", 45],
+                ["img/Analyse/077.png", "img/Analyse/078.png", 46],
+                ["img/Analyse/079.png", "img/Analyse/080.png", 47],
+                ["img/Analyse/081.png", "img/Analyse/082.png", 48],
+                ["img/Analyse/083.png", "img/Analyse/084.png", 49],
+                ["img/Analyse/085.png", "img/Analyse/086.png", 50],
+                ["img/Analyse/087.png", "img/Analyse/088.png", 51],
+                ["img/Analyse/089.png", "img/Analyse/090.png", 52],
+                ["img/Analyse/091.png", "img/Analyse/092.png", 53],
+                ["img/Analyse/093.png", "img/Analyse/094.png", 54],
+                ["img/Analyse/095.png", "img/Analyse/096.png", 55],
+                ["img/Analyse/097.png", "img/Analyse/098.png", 56],
+                ["img/Analyse/099.png", "img/Analyse/100.png", 57],
+                ["img/Analyse/101.png", "img/Analyse/102.png", 58],
+                ["img/Analyse/103.png", "img/Analyse/104.png", 59],
+                ["img/Analyse/105.png", "img/Analyse/106.png", 60],
+                ["img/Analyse/107.png", "img/Analyse/108.png", 61],
+                ["img/Analyse/109.png", "img/Analyse/110.png", 62],
+                ["img/Analyse/111.png", "img/Analyse/112.png", 63],
+                ["img/Analyse/113.png", "img/Analyse/114.png", 64],
+                ["img/Analyse/115.png", "img/Analyse/116.png", 65],
+                ["img/Analyse/117.png", "img/Analyse/118.png", 66],
+                ["img/Analyse/119.png", "img/Analyse/120.png", 67],
+                ["img/Analyse/121.png", "img/Analyse/122.png", 68],
+                ["img/Analyse/137.png", "img/Analyse/138.png", 69],
+                ["img/Analyse/139.png", "img/Analyse/140.png", 70],
+                ["img/Analyse/141.png", "img/Analyse/142.png", 71],
+                ["img/Analyse/143.png", "img/Analyse/144.png", 72],
+                ["img/Analyse/145.png", "img/Analyse/146.png", 73],
+                ["img/Analyse/147.png", "img/Analyse/148.png", 74],
+                ["img/Analyse/149.png", "img/Analyse/150.png", 75],
+                ["img/Analyse/151.png", "img/Analyse/152.png", 76],
+                ["img/Analyse/153.png", "img/Analyse/154.png", 77],
+                ["img/Analyse/155.png", "img/Analyse/156.png", 78],
+                ["img/Analyse/157.png", "img/Analyse/158.png", 79],
+                ["img/Analyse/159.png", "img/Analyse/160.png", 80],
+                ["img/Analyse/161.png", "img/Analyse/162.png", 81],
+                ["img/Analyse/163.png", "img/Analyse/164.png", 82],
+                ["img/Trigo/001.png", "img/Trigo/002.png", 83],
+                ["img/Trigo/003.png", "img/Trigo/004.png", 84],
+                ["img/Trigo/005.png", "img/Trigo/006.png", 85],
+                ["img/Trigo/007.png", "img/Trigo/008.png", 86],
+                ["img/Trigo/009.png", "img/Trigo/010.png", 87],
+                ["img/Trigo/011.png", "img/Trigo/012.png", 88],
+                ["img/Trigo/013.png", "img/Trigo/014.png", 89],
+                ["img/Trigo/015.png", "img/Trigo/016.png", 90],
+                ["img/Trigo/017.png", "img/Trigo/018.png", 91],
+                ["img/Trigo/019.png", "img/Trigo/020.png", 92],
+                ["img/Trigo/021.png", "img/Trigo/022.png", 93],
+                ["img/Trigo/023.png", "img/Trigo/024.png", 94],
+                ["img/Trigo/025.png", "img/Trigo/026.png", 95],
+                ["img/Trigo/027.png", "img/Trigo/028.png", 96],
+                ["img/Trigo/029.png", "img/Trigo/030.png", 97],
+                ["img/Trigo/031.png", "img/Trigo/032.png", 98],
+                ["img/Trigo/033.png", "img/Trigo/034.png", 99],
+                ["img/Trigo/035.png", "img/Trigo/036.png", 100],
+                ["img/Trigo/037.png", "img/Trigo/038.png", 101],
+                ["img/Trigo/039.png", "img/Trigo/040.png", 102],
+                ["img/Trigo/041.png", "img/Trigo/042.png", 103],
+                ["img/Trigo/043.png", "img/Trigo/044.png", 104],
+                ["img/Trigo/045.png", "img/Trigo/046.png", 105],
+                ["img/Trigo/047.png", "img/Trigo/048.png", 106],
+                ["img/Trigo/049.png", "img/Trigo/050.png", 107],
+                ["img/Trigo/051.png", "img/Trigo/052.png", 108],
+                ["img/Algebre_lin/001.png", "img/Algebre_lin/002.png", 109],
+                ["img/Algebre_lin/003.png", "img/Algebre_lin/004.png", 110],
+                ["img/Algebre_lin/005.png", "img/Algebre_lin/006.png", 111],
+                ["img/Algebre_lin/007.png", "img/Algebre_lin/008.png", 112],
+                ["img/Algebre_lin/009.png", "img/Algebre_lin/010.png", 113]
+                // Ajoutez d'autres images selon vos besoins
+            ]
+        };
+
+        // Variables d'état
+        let currentSeries = []; // Ordre des images pour la série actuelle
+        let currentIndex = -1;  // Index de l'image actuelle (-1 signifie avant le début)
+        let seriesHistory = []; // Historique des images visualisées dans cette série
+        let showingAnswer = 0;
+        const imageConfig = [...config.image];
+        let unknown = Array(imageConfig.length).fill(1);
+
+
+        // Variables pour la gestion des balayages tactiles
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // Éléments du DOM
+        const imageContainer = document.querySelector(".image-container");
+        const progressText = document.querySelector(".progress");
+        const endMessage = document.querySelector(".end-message");
+        const prevButton = document.getElementById("prev-button");
+        const nextButton = document.getElementById("next-button");
+        const showButton = document.getElementById("show-button");
+        const unknownButton = document.getElementById("unknown-button");
+
+        // Initialisation du diaporama
+        function initSlideshow() {
+            // Réinitialiser les variables d'état
+            currentIndex = -1;
+            seriesHistory = [];
+            
+            // Créer une copie du tableau d'images pour ne pas modifier l'original
+            imagesCopy = Array(unknown.reduce((acc, val) => acc + val, 0));
+            j = 0;
+            for (let i = 0; i < unknown.length; i++) {
+                if (unknown[i] == 1) {
+                    imagesCopy[j] = imageConfig[i];
+                    j++;
+                }
+            }
+
+            // Mélanger les images de façon aléatoire (algorithme de Fisher-Yates)
+            for (let i = imagesCopy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [imagesCopy[i], imagesCopy[j]] = [imagesCopy[j], imagesCopy[i]];
+            }
+            
+            //Définir la liste des unkown
+            unknown = Array(imagesCopy.length).fill(0);
+
+            // Définir l'ordre de la série actuelle
+            currentSeries = imagesCopy;
+            
+            // Cacher le message de fin s'il était visible
+            endMessage.style.display = "none";
+            
+            // Afficher l'état initial
+            updateDisplay();
+            //console.log(unknown[currentSeries[0][2]]);
+        }
+
+        // Affiche l'image suivante
+        function showNextImage() {
+            if (currentIndex < currentSeries.length - 1) {
+                currentIndex++;
+                seriesHistory.push(currentIndex);
+                updateDisplay();
+            } else {
+                // Fin de la série
+                endMessage.style.display = "block";
+            }
+        }
+
+        // Revenir à l'image précédente
+        function showPreviousImage() {
+            if (seriesHistory.length > 1) {
+                // Supprimer l'index actuel de l'historique
+                seriesHistory.pop();
+                // Obtenir l'index précédent
+                currentIndex = seriesHistory[seriesHistory.length - 1];
+                updateDisplay();
+                
+                // Cacher le message de fin si on revient en arrière depuis la fin
+                endMessage.style.display = "none";
+            }
+        }
+
+        // Mettre à jour l'affichage
+        function updateDisplay() {
+            
+            // S'assurer qu'on n'est pas avant le début ou après la fin
+            if (currentIndex >= 0 && currentIndex < currentSeries.length) {
+                // Créer et afficher l'image
+                
+                
+                // Mettre à jour la réponse
+                if (showingAnswer === 1){
+                    const imagePath = currentSeries[currentIndex][1];
+                    imageContainer.innerHTML = `<img src="${imagePath}" alt="Réponse ${currentIndex + 1}">`;
+                } else {
+                    const imagePath = currentSeries[currentIndex][0];
+                    imageContainer.innerHTML = `<img src="${imagePath}" alt="Question ${currentIndex + 1}">`;
+                }
+
+                // Mettre à jour le texte de progression
+                progressText.textContent = `Vous êtes à l'image ${currentIndex + 1} sur ${currentSeries.length}`;
+            } else if (currentIndex === -1) {
+                // État initial avant le début de la série
+                imageContainer.innerHTML = '<p>Appuyez sur la flèche droite pour commencer</p>';
+                progressText.textContent = `Prêt à démarrer - ${currentSeries.length} images au total`;
+            }
+            
+            // Mettre à jour l'état des boutons
+            updateButtonStates();
+        }
+
+        // Mettre à jour l'état des boutons de navigation
+        function updateButtonStates() {
+            // Désactiver le bouton précédent si on est au début
+            prevButton.disabled = currentIndex <= 0;
+
+            // Désactiver le bouton unknow si activé
+            unknownButton.disabled = currentIndex < 0 || unknown[currentSeries[currentIndex][2]] == 1;
+            
+            // Changer le texte du bouton suivant si on est à la fin
+            if (endMessage.style.display === "block") {
+                nextButton.textContent = "↻";  // Symbole de rechargement/recommencer
+            } else {
+                nextButton.textContent = "→";  // Flèche vers la droite
+            }
+        }
+
+        // Gestionnaire d'événements pour les touches
+        function handleKeyPress(event) {
+            // Flèche droite pour l'image suivante
+            if (event.code === "ArrowRight" || event.key === "ArrowRight") {
+                event.preventDefault(); // Empêcher le défilement de la page
+                
+                if (endMessage.style.display === "block") {
+                    // Si on est à la fin, recommencer une nouvelle série
+                    showingAnswer = 0;
+                    initSlideshow();
+                    showNextImage();
+                } else {
+                    showingAnswer = 0;
+                    showNextImage();
+                }
+            }
+            
+            // Flèche gauche pour revenir en arrière
+            if (event.code === "ArrowLeft" || event.key === "ArrowLeft") {
+                event.preventDefault(); // Empêcher le défilement horizontal
+                if (currentIndex > 0) { // Vérifier qu'on n'est pas au début
+                    showingAnswer = 0;
+                    showPreviousImage();
+                }
+            }
+
+            if (event.code === "Space" || event.key === "Space") {
+                event.preventDefault(); // Empêcher le défilement horizontal
+                if (currentIndex >= 0) { // Vérifier qu'on n'est pas au début
+                    showingAnswer =  1 - showingAnswer * showingAnswer;
+                    updateDisplay();
+                }
+            }
+
+            if (event.code === "m" || event.key === "m") {
+                if (currentIndex >= 0) { // Vérifier qu'on n'est pas au début
+                    unknown[currentSeries[currentIndex][2]] = 1;
+                    updateDisplay();
+                }
+            }
+        }
+
+        // Ajouter l'écouteur d'événements pour les touches
+        document.addEventListener("keydown", handleKeyPress);
+
+        // Initialiser les écouteurs d'événements tactiles
+        initTouchEvents();
+
+        // Initialiser le diaporama au chargement de la page
+        window.addEventListener("load", () => {
+            initSlideshow();
+            updateButtonStates();
+        });
+
+        // Fonction pour initialiser les événements tactiles
+        function initTouchEvents() {
+            document.addEventListener('touchstart', handleTouchStart, false);
+            document.addEventListener('touchend', handleTouchEnd, false);
+            
+            // Ajouter les écouteurs d'événements pour les boutons
+            prevButton.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    showingAnswer = 0;
+                    showPreviousImage();
+                }
+            });
+
+            unknownButton.addEventListener('click', () => {
+                if (currentIndex >= 0) {
+                    unknown[currentSeries[currentIndex][2]] = 1;
+                    updateDisplay();
+                }
+            });
+
+            showButton.addEventListener('click', () => {
+                if (currentIndex >= 0) {
+                    showingAnswer =  1 - showingAnswer * showingAnswer;
+                    updateDisplay();
+                }
+            });
+            
+            nextButton.addEventListener('click', () => {
+                if (endMessage.style.display === "block") {
+                    // Si on est à la fin, recommencer une nouvelle série
+                    showingAnswer = 0;
+                    initSlideshow();
+                    //showNextImage();
+                } else {
+                    showingAnswer = 0;
+                    showNextImage();
+                }
+            });
+        }
+
+        // Gestionnaire pour le début d'un toucher
+        function handleTouchStart(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        }
+
+        // Gestionnaire pour la fin d'un toucher
+        function handleTouchEnd(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        }
+
+        // Fonction pour gérer les balayages
+        function handleSwipe() {
+            const swipeThreshold = 50; // Distance minimale pour considérer un balayage
+            
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Balayage vers la gauche (équivalent à flèche droite - image suivante)
+                if (endMessage.style.display === "block") {
+                    // Si on est à la fin, recommencer une nouvelle série
+                    showingAnswer = 0;
+                    initSlideshow();
+                    showNextImage();
+                } else {
+                    showingAnswer = 0;
+                    showNextImage();
+                }
+            }
+            
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Balayage vers la droite (équivalent à flèche gauche - image précédente)
+                if (currentIndex > 0) { // Vérifier qu'on n'est pas au début
+                    showingAnswer = 0;
+                    showPreviousImage();
+                }
+            }
+        }        
+    </script>
+</body>
+</html>
