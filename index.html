@@ -3,516 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General culture</title>
+    <title>Sélection des listes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
-            text-align: center;
             padding: 20px;
-            touch-action: pan-y; /* Permettre le scroll vertical mais désactiver le scroll horizontal */
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h1 {
             color: #333;
+            text-align: center;
             margin-bottom: 30px;
         }
-        .image-container {
+        .lists-container {
             margin: 20px 0;
-            min-height: 300px;
+        }
+        .list-item {
             display: flex;
-            justify-content: center;
             align-items: center;
-            position: relative;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
         }
-        .image-container img {
-            max-width: 100%;
-            max-height: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        .list-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
         }
-        .answer {
-            font-size: 18px;
-            margin-top: 20px;
-            color: #555;
-            font-weight: bold;
-        }
-        .progress {
-            font-size: 18px;
-            margin-top: 20px;
-            color: #555;
-        }
-        .end-message {
-            font-size: 24px;
-            color: #e74c3c;
-            font-weight: bold;
-            display: none;
-        }
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-        }
-        .nav-button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
+        .list-item label {
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
         }
-        .nav-button:disabled {
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .btn:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
-        .swipe-hint {
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
             display: none;
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        
-        /* Styles responsives pour mobile */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            h1 {
-                font-size: 24px;
-                margin-bottom: 15px;
-            }
-            .image-container {
-                min-height: 200px;
-            }
-            .swipe-hint {
-                display: block;
-                font-style: italic;
-                color: #777;
-                margin: 10px 0;
-            }
         }
     </style>
 </head>
 <body>
-    <h1>General culture</h1>
-    
-    <div class="image-container">
-        <!-- L'image sera insérée ici par JavaScrip -->
-    </div>
-    
-    <div class="progress">
-        <!-- Le message de progression sera inséré ici par JavaScript -->
-    </div>
-    
-    <div class="end-message">
-        Fin de série, on recommence
-    </div>
-    
-    <p class="swipe-hint">Balayez vers la gauche ou la droite pour naviguer</p>
-
-    <div class="nav-buttons">
-        <button id="prev-button" class="nav-button">←</button>
-        <button id="unknown-button" class="nav-button">❗</button>
-        <button id="show-button" class="nav-button">🧐</button>
-        <button id="next-button" class="nav-button">→</button>
-    </div>
-    
-    <div class="instructions">
-        <p>Utilisez la <strong>Flèche droite →</strong> pour afficher l'image suivante</p>
-        <p>Utilisez la <strong>Flèche gauche ←</strong> pour revenir à l'image précédente</p>
-        <p>Sur mobile : <strong>balayez</strong> l'écran ou utilisez les <strong>boutons</strong></p>
+    <div class="container">
+        <h1>Sélection des Listes</h1>
+        
+        <div class="lists-container" id="listsContainer">
+            <!-- Les listes seront générées dynamiquement ici -->
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-secondary" onclick="selectAll()">Tout sélectionner</button>
+            <button class="btn btn-secondary" onclick="selectNone()">Tout désélectionner</button>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-primary" onclick="startApplication()" id="startBtn">Commencer</button>
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            Veuillez sélectionner au moins une liste pour continuer.
+        </div>
     </div>
 
-    <script type="text/javascript">
-        // Configuration du diaporama 
-        const config = {
-            // Liste des noms de fichiers d'images (à remplacer par vos noms réels)
-            image: [
-                ["learn/Algebre/001.png", "learn/Algebre/002.png", 0],
-                ["learn/Algebre/003.png", "learn/Algebre/004.png", 1],
-                ["learn/Algebre/005.png", "learn/Algebre/006.png", 2],
-                ["learn/Algebre/007.png", "learn/Algebre/008.png", 3],
-                ["learn/Algebre/009.png", "learn/Algebre/010.png", 4],
-                ["learn/Algebre/011.png", "learn/Algebre/012.png", 5],
-                ["learn/Algebre/013.png", "learn/Algebre/014.png", 6],
-                ["learn/Algebre/015.png", "learn/Algebre/016.png", 7],
-                ["learn/Analyse/001.png", "learn/Analyse/002.png", 8],
-                ["learn/Analyse/003.png", "learn/Analyse/004.png", 9],
-                ["learn/Analyse/005.png", "learn/Analyse/006.png", 10],
-                ["learn/Analyse/007.png", "learn/Analyse/008.png", 11],
-                ["learn/Analyse/009.png", "learn/Analyse/010.png", 12],
-                ["learn/Analyse/011.png", "learn/Analyse/012.png", 13],
-                ["learn/Analyse/013.png", "learn/Analyse/014.png", 14],
-                ["learn/Analyse/015.png", "learn/Analyse/016.png", 15],
-                ["learn/Analyse/017.png", "learn/Analyse/018.png", 16],
-                ["learn/Analyse/019.png", "learn/Analyse/020.png", 17],
-                ["learn/Analyse/021.png", "learn/Analyse/022.png", 18],
-                ["learn/Analyse/023.png", "learn/Analyse/024.png", 19],
-                ["learn/Analyse/025.png", "learn/Analyse/026.png", 20],
-                ["learn/Analyse/027.png", "learn/Analyse/028.png", 21],
-                ["learn/Analyse/029.png", "learn/Analyse/030.png", 22],
-                ["learn/Analyse/031.png", "learn/Analyse/032.png", 23],
-                ["learn/Analyse/033.png", "learn/Analyse/034.png", 24],
-                ["learn/Analyse/035.png", "learn/Analyse/036.png", 25],
-                ["learn/Analyse/037.png", "learn/Analyse/038.png", 26],
-                ["learn/Analyse/039.png", "learn/Analyse/040.png", 27],
-                ["learn/Analyse/041.png", "learn/Analyse/042.png", 28],
-                ["learn/Analyse/043.png", "learn/Analyse/044.png", 29],
-                ["learn/Analyse/045.png", "learn/Analyse/046.png", 30],
-                ["learn/Analyse/047.png", "learn/Analyse/048.png", 31],
-                ["learn/Analyse/049.png", "learn/Analyse/050.png", 32],
-                ["learn/Analyse/051.png", "learn/Analyse/052.png", 33],
-                ["learn/Analyse/053.png", "learn/Analyse/054.png", 34],
-                ["learn/Analyse/055.png", "learn/Analyse/056.png", 35],
-                ["learn/Analyse/057.png", "learn/Analyse/058.png", 36],
-                ["learn/Analyse/059.png", "learn/Analyse/060.png", 37],
-                ["learn/Analyse/061.png", "learn/Analyse/062.png", 38],
-                ["learn/Analyse/063.png", "learn/Analyse/064.png", 39],
-                ["learn/Analyse/065.png", "learn/Analyse/066.png", 40],
-                ["learn/Analyse/067.png", "learn/Analyse/068.png", 41],
-                ["learn/Analyse/069.png", "learn/Analyse/070.png", 42],
-                ["learn/Analyse/071.png", "learn/Analyse/072.png", 43],
-                ["learn/Analyse/073.png", "learn/Analyse/074.png", 44],
-                ["learn/Analyse/075.png", "learn/Analyse/076.png", 45],
-                ["learn/Analyse/077.png", "learn/Analyse/078.png", 46],
-                ["learn/Analyse/079.png", "learn/Analyse/080.png", 47],
-                ["learn/Analyse/081.png", "learn/Analyse/082.png", 48],
-                ["learn/Analyse/083.png", "learn/Analyse/084.png", 49],
-                ["learn/Analyse/085.png", "learn/Analyse/086.png", 50],
-                ["learn/Analyse/087.png", "learn/Analyse/088.png", 51],
-                ["learn/Analyse/089.png", "learn/Analyse/090.png", 52],
-                ["learn/Analyse/091.png", "learn/Analyse/092.png", 53],
-                ["learn/Analyse/093.png", "learn/Analyse/094.png", 54],
-                ["learn/Analyse/095.png", "learn/Analyse/096.png", 55],
-                ["learn/Analyse/097.png", "learn/Analyse/098.png", 56],
-                ["learn/Analyse/099.png", "learn/Analyse/100.png", 57],
-                ["learn/Analyse/101.png", "learn/Analyse/102.png", 58],
-                ["learn/Analyse/103.png", "learn/Analyse/104.png", 59],
-                ["learn/Analyse/105.png", "learn/Analyse/106.png", 60],
-                ["learn/Analyse/107.png", "learn/Analyse/108.png", 61],
-                ["learn/Analyse/109.png", "learn/Analyse/110.png", 62],
-                ["learn/Analyse/111.png", "learn/Analyse/112.png", 63],
-                ["learn/Analyse/113.png", "learn/Analyse/114.png", 64],
-                ["learn/Analyse/115.png", "learn/Analyse/116.png", 65],
-                ["learn/Analyse/117.png", "learn/Analyse/118.png", 66],
-                ["learn/Analyse/119.png", "learn/Analyse/120.png", 67],
-                ["learn/Analyse/121.png", "learn/Analyse/122.png", 68],
-                ["learn/Analyse/137.png", "learn/Analyse/138.png", 69],
-                ["learn/Analyse/139.png", "learn/Analyse/140.png", 70],
-                ["learn/Analyse/141.png", "learn/Analyse/142.png", 71],
-                ["learn/Analyse/143.png", "learn/Analyse/144.png", 72],
-                ["learn/Analyse/145.png", "learn/Analyse/146.png", 73],
-                ["learn/Analyse/147.png", "learn/Analyse/148.png", 74],
-                ["learn/Analyse/149.png", "learn/Analyse/150.png", 75],
-                ["learn/Analyse/151.png", "learn/Analyse/152.png", 76],
-                ["learn/Analyse/153.png", "learn/Analyse/154.png", 77],
-                ["learn/Analyse/155.png", "learn/Analyse/156.png", 78],
-                ["learn/Analyse/157.png", "learn/Analyse/158.png", 79],
-                ["learn/Analyse/159.png", "learn/Analyse/160.png", 80],
-                ["learn/Analyse/161.png", "learn/Analyse/162.png", 81],
-                ["learn/Analyse/163.png", "learn/Analyse/164.png", 82],
-                ["learn/Trigo/001.png", "learn/Trigo/002.png", 83],
-                ["learn/Trigo/003.png", "learn/Trigo/004.png", 84],
-                ["learn/Trigo/005.png", "learn/Trigo/006.png", 85],
-                ["learn/Trigo/007.png", "learn/Trigo/008.png", 86],
-                ["learn/Trigo/009.png", "learn/Trigo/010.png", 87],
-                ["learn/Trigo/011.png", "learn/Trigo/012.png", 88],
-                ["learn/Trigo/013.png", "learn/Trigo/014.png", 89],
-                ["learn/Trigo/015.png", "learn/Trigo/016.png", 90],
-                ["learn/Trigo/017.png", "learn/Trigo/018.png", 91],
-                ["learn/Trigo/019.png", "learn/Trigo/020.png", 92],
-                ["learn/Trigo/021.png", "learn/Trigo/022.png", 93],
-                ["learn/Trigo/023.png", "learn/Trigo/024.png", 94],
-                ["learn/Trigo/025.png", "learn/Trigo/026.png", 95],
-                ["learn/Trigo/027.png", "learn/Trigo/028.png", 96],
-                ["learn/Trigo/029.png", "learn/Trigo/030.png", 97],
-                ["learn/Trigo/031.png", "learn/Trigo/032.png", 98],
-                ["learn/Trigo/033.png", "learn/Trigo/034.png", 99],
-                ["learn/Trigo/035.png", "learn/Trigo/036.png", 100],
-                ["learn/Trigo/037.png", "learn/Trigo/038.png", 101],
-                ["learn/Trigo/039.png", "learn/Trigo/040.png", 102],
-                ["learn/Trigo/041.png", "learn/Trigo/042.png", 103],
-                ["learn/Trigo/043.png", "learn/Trigo/044.png", 104],
-                ["learn/Trigo/045.png", "learn/Trigo/046.png", 105],
-                ["learn/Trigo/047.png", "learn/Trigo/048.png", 106],
-                ["learn/Trigo/049.png", "learn/Trigo/050.png", 107],
-                ["learn/Trigo/051.png", "learn/Trigo/052.png", 108],
-                ["learn/Algebre_lin/001.png", "learn/Algebre_lin/002.png", 109],
-                ["learn/Algebre_lin/003.png", "learn/Algebre_lin/004.png", 110],
-                ["learn/Algebre_lin/005.png", "learn/Algebre_lin/006.png", 111],
-                ["learn/Algebre_lin/007.png", "learn/Algebre_lin/008.png", 112],
-                ["learn/Algebre_lin/009.png", "learn/Algebre_lin/010.png", 113]
-                // Ajoutez d'autres images selon vos besoins
-            ]
-        };
-
-        // Variables d'état
-        let currentSeries = []; // Ordre des images pour la série actuelle
-        let currentIndex = -1;  // Index de l'image actuelle (-1 signifie avant le début)
-        let seriesHistory = []; // Historique des images visualisées dans cette série
-        let showingAnswer = 0;
-        const imageConfig = [...config.image];
-        let unknown = Array(imageConfig.length).fill(1);
-
-
-        // Variables pour la gestion des balayages tactiles
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        // Éléments du DOM
-        const imageContainer = document.querySelector(".image-container");
-        const progressText = document.querySelector(".progress");
-        const endMessage = document.querySelector(".end-message");
-        const prevButton = document.getElementById("prev-button");
-        const nextButton = document.getElementById("next-button");
-        const showButton = document.getElementById("show-button");
-        const unknownButton = document.getElementById("unknown-button");
-
-        // Initialisation du diaporama
-        function initSlideshow() {
-            // Réinitialiser les variables d'état
-            currentIndex = -1;
-            seriesHistory = [];
+    <script>
+        let availableLists = [];
+        
+        // Fonction pour détecter les sous-dossiers dans lists/
+        async function detectAvailableLists() {
+            const container = document.getElementById('listsContainer');
             
-            // Créer une copie du tableau d'images pour ne pas modifier l'original
-            imagesCopy = Array(unknown.reduce((acc, val) => acc + val, 0));
-            j = 0;
-            for (let i = 0; i < unknown.length; i++) {
-                if (unknown[i] == 1) {
-                    imagesCopy[j] = imageConfig[i];
-                    j++;
+            try {
+                // Affichage du chargement
+                container.innerHTML = '<p style="text-align: center; color: #666;">Chargement des listes disponibles...</p>';
+                
+                // Liste des noms de dossiers potentiels à vérifier
+                const potentialLists = [];
+                
+                // Générer une liste de noms potentiels (list1 à list50)
+                for (let i = 1; i <= 50; i++) {
+                    potentialLists.push(`list${i}`);
                 }
+                
+                // Vérifier l'existence de chaque dossier
+                const existingLists = [];
+                
+                for (const listName of potentialLists) {
+                    try {
+                        // Tenter d'accéder à un fichier dans le dossier ou au dossier lui-même
+                        const response = await fetch(`lists/${listName}/`, { method: 'HEAD' });
+                        if (response.ok || response.status === 403) {
+                            // 403 peut indiquer que le dossier existe mais l'accès est restreint
+                            existingLists.push(listName);
+                        }
+                    } catch (error) {
+                        // Ignorer les erreurs pour les dossiers qui n'existent pas
+                        continue;
+                    }
+                }
+                
+                // Alternative : vérifier avec un fichier index.html dans chaque dossier
+                /*if (existingLists.length === 0) {
+                    for (const listName of potentialLists) {
+                        try {
+                            const response = await fetch(`lists/${listName}/index.html`, { method: 'HEAD' });
+                            if (response.ok) {
+                                existingLists.push(listName);
+                            }
+                        } catch (error) {
+                            continue;
+                        }
+                    }
+                }*/
+                
+                availableLists = existingLists;
+                
+                if (availableLists.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; color: #d63384; background-color: #f8d7da; padding: 15px; border-radius: 5px;">
+                            <p><strong>Aucune liste détectée</strong></p>
+                            <p>Vérifiez que le dossier "lists/" contient des sous-dossiers ou ajoutez des fichiers index.html dans chaque sous-dossier.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                generateListInterface();
+                
+            } catch (error) {
+                console.error('Erreur lors de la détection des listes:', error);
+                container.innerHTML = `
+                    <div style="text-align: center; color: #d63384; background-color: #f8d7da; padding: 15px; border-radius: 5px;">
+                        <p><strong>Erreur de détection</strong></p>
+                        <p>Impossible de détecter les listes disponibles. Vérifiez la structure de vos dossiers.</p>
+                    </div>
+                `;
             }
-
-            // Mélanger les images de façon aléatoire (algorithme de Fisher-Yates)
-            for (let i = imagesCopy.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [imagesCopy[i], imagesCopy[j]] = [imagesCopy[j], imagesCopy[i]];
-            }
-            
-            //Définir la liste des unkown
-            unknown = Array(imagesCopy.length).fill(0);
-
-            // Définir l'ordre de la série actuelle
-            currentSeries = imagesCopy;
-            
-            // Cacher le message de fin s'il était visible
-            endMessage.style.display = "none";
-            
-            // Afficher l'état initial
-            updateDisplay();
-            //console.log(unknown[currentSeries[0][2]]);
         }
-
-        // Affiche l'image suivante
-        function showNextImage() {
-            if (currentIndex < currentSeries.length - 1) {
-                currentIndex++;
-                seriesHistory.push(currentIndex);
-                updateDisplay();
+        
+        // Génération de l'interface de sélection
+        function generateListInterface() {
+            const container = document.getElementById('listsContainer');
+            container.innerHTML = ''; // Vider le contenu précédent
+            
+            if (availableLists.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">Aucune liste disponible.</p>';
+                return;
+            }
+            
+            availableLists.forEach(listName => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = listName;
+                checkbox.value = listName;
+                checkbox.addEventListener('change', updateStartButton);
+                
+                const label = document.createElement('label');
+                label.htmlFor = listName;
+                label.textContent = listName;
+                
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+                container.appendChild(listItem);
+            });
+        }
+        
+        // Sélectionner toutes les listes
+        function selectAll() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateStartButton();
+        }
+        
+        // Désélectionner toutes les listes
+        function selectNone() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateStartButton();
+        }
+        
+        // Mettre à jour l'état du bouton "Commencer"
+        function updateStartButton() {
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const startBtn = document.getElementById('startBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (checkedBoxes.length > 0) {
+                startBtn.disabled = false;
+                errorMessage.style.display = 'none';
             } else {
-                // Fin de la série
-                endMessage.style.display = "block";
+                startBtn.disabled = true;
             }
         }
-
-        // Revenir à l'image précédente
-        function showPreviousImage() {
-            if (seriesHistory.length > 1) {
-                // Supprimer l'index actuel de l'historique
-                seriesHistory.pop();
-                // Obtenir l'index précédent
-                currentIndex = seriesHistory[seriesHistory.length - 1];
-                updateDisplay();
-                
-                // Cacher le message de fin si on revient en arrière depuis la fin
-                endMessage.style.display = "none";
-            }
-        }
-
-        // Mettre à jour l'affichage
-        function updateDisplay() {
+        
+        // Démarrer l'application avec les listes sélectionnées
+        function startApplication() {
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const errorMessage = document.getElementById('errorMessage');
             
-            // S'assurer qu'on n'est pas avant le début ou après la fin
-            if (currentIndex >= 0 && currentIndex < currentSeries.length) {
-                // Créer et afficher l'image
-                
-                
-                // Mettre à jour la réponse
-                if (showingAnswer === 1){
-                    const imagePath = currentSeries[currentIndex][1];
-                    imageContainer.innerHTML = `<img src="${imagePath}" alt="Réponse ${currentIndex + 1}">`;
-                } else {
-                    const imagePath = currentSeries[currentIndex][0];
-                    imageContainer.innerHTML = `<img src="${imagePath}" alt="Question ${currentIndex + 1}">`;
-                }
-
-                // Mettre à jour le texte de progression
-                progressText.textContent = `Vous êtes à l'image ${currentIndex + 1} sur ${currentSeries.length}`;
-            } else if (currentIndex === -1) {
-                // État initial avant le début de la série
-                imageContainer.innerHTML = '<p>Appuyez sur la flèche droite pour commencer</p>';
-                progressText.textContent = `Prêt à démarrer - ${currentSeries.length} images au total`;
+            if (checkedBoxes.length === 0) {
+                errorMessage.style.display = 'block';
+                return;
             }
             
-            // Mettre à jour l'état des boutons
-            updateButtonStates();
-        }
-
-        // Mettre à jour l'état des boutons de navigation
-        function updateButtonStates() {
-            // Désactiver le bouton précédent si on est au début
-            prevButton.disabled = currentIndex <= 0;
-
-            // Désactiver le bouton unknow si activé
-            unknownButton.disabled = currentIndex < 0 || unknown[currentSeries[currentIndex][2]] == 1;
+            // Récupérer les noms des listes sélectionnées
+            const selectedLists = Array.from(checkedBoxes).map(checkbox => checkbox.value);
             
-            // Changer le texte du bouton suivant si on est à la fin
-            if (endMessage.style.display === "block") {
-                nextButton.textContent = "↻";  // Symbole de rechargement/recommencer
-            } else {
-                nextButton.textContent = "→";  // Flèche vers la droite
-            }
-        }
-
-        // Gestionnaire d'événements pour les touches
-        function handleKeyPress(event) {
-            // Flèche droite pour l'image suivante
-            if (event.code === "ArrowRight" || event.key === "ArrowRight") {
-                event.preventDefault(); // Empêcher le défilement de la page
-                
-                if (endMessage.style.display === "block") {
-                    // Si on est à la fin, recommencer une nouvelle série
-                    showingAnswer = 0;
-                    initSlideshow();
-                    showNextImage();
-                } else {
-                    showingAnswer = 0;
-                    showNextImage();
-                }
-            }
+            // Créer l'URL avec les paramètres
+            const params = new URLSearchParams();
+            params.set('lists', selectedLists.join(','));
             
-            // Flèche gauche pour revenir en arrière
-            if (event.code === "ArrowLeft" || event.key === "ArrowLeft") {
-                event.preventDefault(); // Empêcher le défilement horizontal
-                if (currentIndex > 0) { // Vérifier qu'on n'est pas au début
-                    showingAnswer = 0;
-                    showPreviousImage();
-                }
-            }
-
-            if (event.code === "Space" || event.key === "Space") {
-                event.preventDefault(); // Empêcher le défilement horizontal
-                if (currentIndex >= 0) { // Vérifier qu'on n'est pas au début
-                    showingAnswer =  1 - showingAnswer * showingAnswer;
-                    updateDisplay();
-                }
-            }
-
-            if (event.code === "m" || event.key === "m") {
-                if (currentIndex >= 0) { // Vérifier qu'on n'est pas au début
-                    unknown[currentSeries[currentIndex][2]] = 1;
-                    updateDisplay();
-                }
-            }
+            // Rediriger vers main_part.html avec les paramètres
+            window.location.href = `main_part.html?${params.toString()}`;
         }
-
-        // Ajouter l'écouteur d'événements pour les touches
-        document.addEventListener("keydown", handleKeyPress);
-
-        // Initialiser les écouteurs d'événements tactiles
-        initTouchEvents();
-
-        // Initialiser le diaporama au chargement de la page
-        window.addEventListener("load", () => {
-            initSlideshow();
-            updateButtonStates();
+        
+        // Initialisation de la page
+        document.addEventListener('DOMContentLoaded', async function() {
+            await detectAvailableLists();
+            updateStartButton();
         });
-
-        // Fonction pour initialiser les événements tactiles
-        function initTouchEvents() {
-            document.addEventListener('touchstart', handleTouchStart, false);
-            document.addEventListener('touchend', handleTouchEnd, false);
-            
-            // Ajouter les écouteurs d'événements pour les boutons
-            prevButton.addEventListener('click', () => {
-                if (currentIndex > 0) {
-                    showingAnswer = 0;
-                    showPreviousImage();
-                }
-            });
-
-            unknownButton.addEventListener('click', () => {
-                if (currentIndex >= 0) {
-                    unknown[currentSeries[currentIndex][2]] = 1;
-                    updateDisplay();
-                }
-            });
-
-            showButton.addEventListener('click', () => {
-                if (currentIndex >= 0) {
-                    showingAnswer =  1 - showingAnswer * showingAnswer;
-                    updateDisplay();
-                }
-            });
-            
-            nextButton.addEventListener('click', () => {
-                if (endMessage.style.display === "block") {
-                    // Si on est à la fin, recommencer une nouvelle série
-                    showingAnswer = 0;
-                    initSlideshow();
-                    //showNextImage();
-                } else {
-                    showingAnswer = 0;
-                    showNextImage();
-                }
-            });
-        }
-
-        // Gestionnaire pour le début d'un toucher
-        function handleTouchStart(event) {
-            touchStartX = event.changedTouches[0].screenX;
-        }
-
-        // Gestionnaire pour la fin d'un toucher
-        function handleTouchEnd(event) {
-            touchEndX = event.changedTouches[0].screenX;
-            handleSwipe();
-        }
-
-        // Fonction pour gérer les balayages
-        function handleSwipe() {
-            const swipeThreshold = 50; // Distance minimale pour considérer un balayage
-            
-            if (touchEndX < touchStartX - swipeThreshold) {
-                // Balayage vers la gauche (équivalent à flèche droite - image suivante)
-                if (endMessage.style.display === "block") {
-                    // Si on est à la fin, recommencer une nouvelle série
-                    showingAnswer = 0;
-                    initSlideshow();
-                    showNextImage();
-                } else {
-                    showingAnswer = 0;
-                    showNextImage();
-                }
-            }
-            
-            if (touchEndX > touchStartX + swipeThreshold) {
-                // Balayage vers la droite (équivalent à flèche gauche - image précédente)
-                if (currentIndex > 0) { // Vérifier qu'on n'est pas au début
-                    showingAnswer = 0;
-                    showPreviousImage();
-                }
-            }
-        }        
     </script>
 </body>
 </html>
