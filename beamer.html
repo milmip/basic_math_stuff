@@ -132,7 +132,19 @@
     </div>
 
     <script type="text/javascript">
-        // Configuration du diaporama 
+        
+        let prev_images = sessionStorage.getItem("images").split(',');
+        let config = {image : []};
+
+        for (let i = 0; i < prev_images.length; i+=3)
+        {
+            config.image.push([prev_images[i], prev_images[i+1], prev_images[i+2]]);
+        }
+
+        console.log("Attention");
+        console.log(config);
+
+        /*// Configuration du diaporama 
         const config = {
             // Liste des noms de fichiers d'images (à remplacer par vos noms réels)
             image: [
@@ -252,7 +264,7 @@
                 ["img/Algebre_lin/009.png", "img/Algebre_lin/010.png", 113]
                 // Ajoutez d'autres images selon vos besoins
             ]
-        };
+        };*/
 
         // Variables d'état
         let currentSeries = []; // Ordre des images pour la série actuelle

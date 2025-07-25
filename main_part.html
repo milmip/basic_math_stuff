@@ -73,6 +73,18 @@
 
     <script>
         // Variables globales pour stocker les listes sélectionnées
+
+        let prev_images = sessionStorage.getItem("images").split(',');
+        let config = {image : []};
+
+        for (let i = 0; i < prev_images.length; i+=3)
+        {
+            config.image.push([prev_images[i], prev_images[i+1], prev_images[i+2]]);
+        }
+
+        console.log(config);
+        
+
         let selectedLists = [];
         
         // Fonction pour récupérer les paramètres URL
@@ -122,12 +134,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Récupérer les listes depuis les paramètres URL
             selectedLists = getUrlParameters();
+
+            
             
             // Afficher les listes sélectionnées
             displaySelectedLists();
             
             // Log pour le développement (peut être retiré en production)
             console.log('Listes sélectionnées:', selectedLists);
+            
         });
         
         // Fonction utilitaire pour accéder aux listes sélectionnées depuis d'autres scripts

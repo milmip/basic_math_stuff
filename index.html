@@ -100,168 +100,180 @@
     </div>
 
     <script>
-        let availableLists = [];
-        
-        // Fonction pour détecter les sous-dossiers dans lists/
-        async function detectAvailableLists() {
-            const container = document.getElementById('listsContainer');
-            
-            try {
-                // Affichage du chargement
-                container.innerHTML = '<p style="text-align: center; color: #666;">Chargement des listes disponibles...</p>';
-                
-                // Liste des noms de dossiers potentiels à vérifier
-                const potentialLists = [];
-                
-                // Générer une liste de noms potentiels (list1 à list50)
-                for (let i = 1; i <= 50; i++) {
-                    potentialLists.push(`list${i}`);
+
+    async function chargerNomsDepuisCSV() 
+    {
+        try 
+        {
+            const response = await fetch('img_locations/folder_names.csv');
+            if (!response.ok) 
+            {
+                throw new Error(`Erreur HTTP : ${response.status}`);
+            }
+
+            const texte = await response.text();
+
+            const noms = texte
+            .split('\n')
+            .map(nom => nom.trim())
+            .filter(nom => nom.length > 0);
+
+            return noms;
+
+        } 
+        catch (erreur) 
+        {
+            console.error('Erreur de chargement du CSV :', erreur);
+            return null; // Ou [] si tu préfères éviter null
+        }
+    }
+
+    async function chargerNomImageDepuisListe(nomsDeFichiers)
+    {
+        let config = [];
+        let acc = 0;
+        for (let i = 0; i < nomsDeFichiers.length; i++)
+        {
+            //console.log(nomsDeFichiers[i]);
+            try 
+            {
+                let response = await fetch(`img_locations/${nomsDeFichiers[i]}.csv`);
+                if (!response.ok) 
+                {
+                    throw new Error(`Erreur HTTP : ${response.status}`);
                 }
+
+                let texte = await response.text();
+
                 
-                // Vérifier l'existence de chaque dossier
-                const existingLists = [];
-                
-                for (const listName of potentialLists) {
-                    try {
-                        // Tenter d'accéder à un fichier dans le dossier ou au dossier lui-même
-                        const response = await fetch(`lists/${listName}/`, { method: 'HEAD' });
-                        if (response.ok || response.status === 403) {
-                            // 403 peut indiquer que le dossier existe mais l'accès est restreint
-                            existingLists.push(listName);
-                        }
-                    } catch (error) {
-                        // Ignorer les erreurs pour les dossiers qui n'existent pas
-                        continue;
-                    }
+
+                const noms = texte
+                .split('\n')
+                .map(nom => nom.trim())
+                .filter(nom => nom.length > 0);
+
+                for (let j = 0; j < noms.length; j+=2)
+                {
+                    config.push([`img/${nomsDeFichiers[i]}/${noms[j]}`, `img/${nomsDeFichiers[i]}/${noms[j+1]}`, acc]);
+                    acc++;
                 }
-                
-                // Alternative : vérifier avec un fichier index.html dans chaque dossier
-                /*if (existingLists.length === 0) {
-                    for (const listName of potentialLists) {
-                        try {
-                            const response = await fetch(`lists/${listName}/index.html`, { method: 'HEAD' });
-                            if (response.ok) {
-                                existingLists.push(listName);
-                            }
-                        } catch (error) {
-                            continue;
-                        }
-                    }
-                }*/
-                
-                availableLists = existingLists;
-                
-                if (availableLists.length === 0) {
-                    container.innerHTML = `
-                        <div style="text-align: center; color: #d63384; background-color: #f8d7da; padding: 15px; border-radius: 5px;">
-                            <p><strong>Aucune liste détectée</strong></p>
-                            <p>Vérifiez que le dossier "lists/" contient des sous-dossiers ou ajoutez des fichiers index.html dans chaque sous-dossier.</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                generateListInterface();
-                
-            } catch (error) {
-                console.error('Erreur lors de la détection des listes:', error);
-                container.innerHTML = `
-                    <div style="text-align: center; color: #d63384; background-color: #f8d7da; padding: 15px; border-radius: 5px;">
-                        <p><strong>Erreur de détection</strong></p>
-                        <p>Impossible de détecter les listes disponibles. Vérifiez la structure de vos dossiers.</p>
-                    </div>
-                `;
+            } 
+            catch (erreur) 
+            {
+                console.error('Erreur de chargement du CSV :', erreur);
+                return null; // Ou [] si tu préfères éviter null
             }
         }
-        
-        // Génération de l'interface de sélection
-        function generateListInterface() {
-            const container = document.getElementById('listsContainer');
-            container.innerHTML = ''; // Vider le contenu précédent
-            
-            if (availableLists.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666;">Aucune liste disponible.</p>';
-                return;
-            }
-            
-            availableLists.forEach(listName => {
-                const listItem = document.createElement('div');
-                listItem.className = 'list-item';
-                
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = listName;
-                checkbox.value = listName;
-                checkbox.addEventListener('change', updateStartButton);
-                
-                const label = document.createElement('label');
-                label.htmlFor = listName;
-                label.textContent = listName;
-                
-                listItem.appendChild(checkbox);
-                listItem.appendChild(label);
-                container.appendChild(listItem);
-            });
-        }
-        
-        // Sélectionner toutes les listes
-        function selectAll() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = true;
-            });
-            updateStartButton();
-        }
-        
-        // Désélectionner toutes les listes
-        function selectNone() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            updateStartButton();
-        }
-        
-        // Mettre à jour l'état du bouton "Commencer"
-        function updateStartButton() {
-            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            const startBtn = document.getElementById('startBtn');
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (checkedBoxes.length > 0) {
-                startBtn.disabled = false;
-                errorMessage.style.display = 'none';
-            } else {
-                startBtn.disabled = true;
-            }
-        }
-        
-        // Démarrer l'application avec les listes sélectionnées
-        function startApplication() {
-            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (checkedBoxes.length === 0) {
-                errorMessage.style.display = 'block';
-                return;
-            }
-            
-            // Récupérer les noms des listes sélectionnées
-            const selectedLists = Array.from(checkedBoxes).map(checkbox => checkbox.value);
-            
-            // Créer l'URL avec les paramètres
-            const params = new URLSearchParams();
-            params.set('lists', selectedLists.join(','));
-            
-            // Rediriger vers main_part.html avec les paramètres
-            window.location.href = `main_part.html?${params.toString()}`;
-        }
-        
-        // Initialisation de la page
-        document.addEventListener('DOMContentLoaded', async function() {
-            await detectAvailableLists();
-            updateStartButton();
+        //console.log(config);
+        return config;
+    }
+
+    // Génération de l'interface de sélection
+    function generateListInterface(availableLists) 
+    {
+        const container = document.getElementById('listsContainer');
+
+        availableLists.forEach(listName => 
+        {
+            const listItem = document.createElement('div');
+            listItem.className = 'list-item';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = listName;
+            checkbox.value = listName;
+            checkbox.addEventListener('change', updateStartButton);
+
+            const label = document.createElement('label');
+            label.htmlFor = listName;
+            label.textContent = listName;
+
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+            container.appendChild(listItem);
         });
+    }
+
+    // Sélectionner toutes les listes
+    function selectAll() 
+    {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => 
+        {
+            checkbox.checked = true;
+        });
+        updateStartButton();
+    }
+
+    // Désélectionner toutes les listes
+    function selectNone() 
+    {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => 
+        {
+            checkbox.checked = false;
+        });
+        updateStartButton();
+    }
+
+    // Mettre à jour l'état du bouton "Commencer"
+    function updateStartButton() 
+    {
+        const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        const startBtn = document.getElementById('startBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        if (checkedBoxes.length > 0)
+        {
+            startBtn.disabled = false;
+            errorMessage.style.display = 'none';
+        }
+        else
+        {
+            startBtn.disabled = true;
+        }
+    }
+
+    // Démarrer l'application avec les listes sélectionnées
+    async function startApplication()
+    {
+        const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        const errorMessage = document.getElementById('errorMessage');
+
+        if (checkedBoxes.length === 0)
+        {
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Récupérer les noms des listes sélectionnées
+        const selectedLists = Array.from(checkedBoxes).map(checkbox => checkbox.value);
+
+        let config = await chargerNomImageDepuisListe(selectedLists);
+
+        // Créer l'URL avec les paramètres
+        const params = new URLSearchParams();
+        params.set('lists', selectedLists.join(','));
+
+        sessionStorage.setItem("images", config);
+        //console.log("end");
+
+        // Rediriger vers main_part.html avec les paramètres
+        window.location.href = `beamer.html?${params.toString()}`;
+    }
+
+
+
+    // Appel automatique au chargement de la page
+    window.addEventListener('DOMContentLoaded', async () => 
+    {
+        const noms = await chargerNomsDepuisCSV();
+        ///*const config = */ await chargerNomImageDepuisListe(noms);
+        //sessionStorage.setItem("lists_name", noms);
+        generateListInterface(noms)
+
+    });
+
     </script>
 </body>
 </html>
