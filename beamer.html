@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General culture</title>
+    <title>Sache</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,7 +102,7 @@
     </style>
 </head>
 <body>
-    <h1>General culture</h1>
+    <h1>Sache</h1>
     
     <div class="image-container">
         <!-- L'image sera insérée ici par JavaScrip -->
@@ -371,7 +371,7 @@
                 progressText.textContent = `Vous êtes à l'image ${currentIndex + 1} sur ${currentSeries.length}`;
             } else if (currentIndex === -1) {
                 // État initial avant le début de la série
-                imageContainer.innerHTML = '<p>Appuyez sur la flèche droite pour commencer</p>';
+                imageContainer.innerHTML = `<p>Vous révisez <strong>${selectedLists}</strong>.</p>`;
                 progressText.textContent = `Prêt à démarrer - ${currentSeries.length} images au total`;
             }
             
@@ -437,6 +437,16 @@
             }
         }
 
+        function getUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const listsParam = urlParams.get('lists');
+            
+            if (listsParam) {
+                return listsParam;
+            }
+            return [];
+        }
+
         // Ajouter l'écouteur d'événements pour les touches
         document.addEventListener("keydown", handleKeyPress);
 
@@ -445,6 +455,7 @@
 
         // Initialiser le diaporama au chargement de la page
         window.addEventListener("load", () => {
+            selectedLists = getUrlParameters();
             initSlideshow();
             updateButtonStates();
         });
