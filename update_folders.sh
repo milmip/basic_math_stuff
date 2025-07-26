@@ -1,5 +1,9 @@
 #!/bin/bash
 
+cd "img_locations"
+rm *
+cd ..
+
 cd "img/"
 # Parcourt tous les sous-dossiers du dossier courant
 for dir in */; do
