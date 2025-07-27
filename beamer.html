@@ -12,10 +12,14 @@
             text-align: center;
             padding: 20px;
             touch-action: pan-y; /* Permettre le scroll vertical mais désactiver le scroll horizontal */
+            background-image: url('background.jpg');
         }
         h1 {
             color: #333;
             margin-bottom: 30px;
+        }
+        p {
+            color: #e0e0e0;
         }
         .image-container {
             margin: 20px 0;
@@ -24,6 +28,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            color: e0e0e0;
         }
         .image-container img {
             max-width: 100%;
@@ -33,13 +38,13 @@
         .answer {
             font-size: 18px;
             margin-top: 20px;
-            color: #555;
+            color: #e0e0e0;
             font-weight: bold;
         }
         .progress {
             font-size: 18px;
             margin-top: 20px;
-            color: #555;
+            color: #e0e0e0;
         }
         .end-message {
             font-size: 24px;
@@ -102,8 +107,6 @@
     </style>
 </head>
 <body>
-    <h1>Sache</h1>
-    
     <div class="image-container">
         <!-- L'image sera insérée ici par JavaScrip -->
     </div>
@@ -123,12 +126,6 @@
         <button id="unknown-button" class="nav-button">❗</button>
         <button id="show-button" class="nav-button">🧐</button>
         <button id="next-button" class="nav-button">→</button>
-    </div>
-    
-    <div class="instructions">
-        <p>Utilisez la <strong>Flèche droite →</strong> pour afficher l'image suivante</p>
-        <p>Utilisez la <strong>Flèche gauche ←</strong> pour revenir à l'image précédente</p>
-        <p>Sur mobile : <strong>balayez</strong> l'écran ou utilisez les <strong>boutons</strong></p>
     </div>
 
     <script type="text/javascript">
